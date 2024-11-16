@@ -7,8 +7,8 @@ var w = (c.width = window.innerWidth),
   opts = {
     get strings() {
       const sentences = [
-        ["HAPPY", "BIRTHDAY!"],
-        ["生日快乐", "愿你每一天", "都充满阳光和欢笑", "每一步都走向成功和幸福"],
+        ["HAPPY", "BIRTHDAY", "Ye Fang"],
+        ["生日快乐", "愿你每一天", "都充满阳光和欢笑"],
       ];
  
       return sentences[sentenceIndex++ % sentences.length];
