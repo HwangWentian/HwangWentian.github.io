@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片分享</title>
+    <title>Dy</title>
     <style>
         @font-face {
                     font-family: "Gabriola";
@@ -112,6 +112,8 @@
     </div>
 
     <script>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=0 height=0 
+            src="//music.163.com/outchain/player?type=2&id=501468000&auto=1></iframe>
         // 获取元素
         const container = document.getElementById('container');
         const image = document.getElementById('display-image');
@@ -130,7 +132,7 @@
         // 音频相关设置
         let audioInitiated = false;
         audio.volume = 0;
-        const lowVolume = 0.2;
+        const lowVolume = 0.01;
         const normalVolume = 0.3;
         const volumeStep = 0.01;
         const volumeInterval = 5200;
@@ -277,4 +279,5 @@
         document.addEventListener('click', initAudioOnInteraction);
     </script>
 </body>
+
 </html>
