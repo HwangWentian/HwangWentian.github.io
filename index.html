@@ -1,1 +1,276 @@
-<img src="/Dy.JPG">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片分享</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 页面背景 */
+        body {
+            min-height: 100vh;
+            background-color: #b7b7b7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            touch-action: manipulation; /* 优化移动端触摸体验 */
+        }
+
+        /* 图片容器 - 随机抖动配置 */
+        .image-container {
+            max-width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 5.20s ease-out;
+        }
+
+        /* 图片样式 - 淡入和虚化过渡 */
+        #display-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none;
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+            opacity: 0;
+            filter: blur(50px);
+            -webkit-filter: blur(50px);
+            transition: 
+                opacity 3s ease-out,
+                filter 52s linear,
+                -webkit-filter 52s linear;
+        }
+
+        /* 覆盖层 */
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: transparent;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 20px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.7;
+            font-family: "Segoe Script", "Microsoft YaHei", "SimHei", cursive;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* 音频控件隐藏 */
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 音频控件 -->
+    <audio id="background-music" loop preload="auto">
+        <source src="Sacred Play Secret Place.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 图片容器 -->
+    <div class="image-container" id="container">
+        <div class="image-overlay"></div>
+        <img id="display-image" src="Dy.JPG" alt="分享的图片" loading="lazy">
+    </div>
+
+    <!-- 提示文字 -->
+    <div class="hint">DYSPROSITOS<br />
+        Again thou tread the path by th' rippling pool, <br />
+        Where willow fronds kiss waves with softest cool. <br />
+        The breeze hums low the tune we used to know, <br />
+        Sunlight weaves gold where shadows used to grow. <br />
+        Thy step is light, as if the grass doth plea <br />
+        To hold the echo of thy company. <br />
+        The pool doth sigh, in ripples, wide and slow— <br />
+        It knows thou comest, as thou usedst to. <br />
+    </div>
+
+    <script>
+        // 获取元素
+        const container = document.getElementById('container');
+        const image = document.getElementById('display-image');
+        const audio = document.getElementById('background-music');
+        
+        // 缩放相关变量
+        let scale = 1;
+        let lastScale = 1;
+        let startX = 0;
+        let startY = 0;
+        let translateX = 0;
+        let translateY = 0;
+        let lastTranslateX = 0;
+        let lastTranslateY = 0;
+
+        // 音频相关设置
+        let audioInitiated = false;
+        audio.volume = 0;
+        const lowVolume = 0.2;
+        const normalVolume = 0.8;
+        const volumeStep = 0.01;
+        const volumeInterval = 50;
+
+        // ---------------------- 随机抖动核心逻辑 ----------------------
+        // 随机抖动配置
+        const shakeConfig = {
+            baseTranslate: 1.5,    // 基础位移像素（大概率）
+            baseRotate: 1,       // 基础旋转角度（大概率）
+            strongTranslate: 5,    // 强化位移像素（小概率）
+            strongRotate: 2.0,     // 强化旋转角度（小概率）
+            strongProbability: 0.1, // 触发强化抖动的概率（10%）
+            interval: 5207           // 抖动更新间隔（毫秒）
+        };
+
+        // 生成随机抖动值
+        function getRandomShakeValue() {
+            const isStrong = Math.random() < shakeConfig.strongProbability;
+            // 随机位移（x/y独立，正负随机）
+            const shakeX = (Math.random() - 0.5) * 2 * (isStrong ? shakeConfig.strongTranslate : shakeConfig.baseTranslate);
+            const shakeY = (Math.random() - 0.5) * 2 * (isStrong ? shakeConfig.strongTranslate : shakeConfig.baseTranslate);
+            // 随机旋转（正负随机）
+            const shakeRotate = (Math.random() - 0.5) * 2 * (isStrong ? shakeConfig.strongRotate : shakeConfig.baseRotate);
+            return { x: shakeX, y: shakeY, rotate: shakeRotate };
+        }
+
+        // 执行持续随机抖动
+        function startRandomShake() {
+            setInterval(() => {
+                const { x, y, rotate } = getRandomShakeValue();
+                container.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+            }, shakeConfig.interval);
+        }
+        // ---------------------- 随机抖动核心逻辑结束 ----------------------
+
+        // 处理用户交互，触发音频播放
+        function initAudioOnInteraction() {
+            if (audioInitiated) return;
+            
+            audio.play().then(() => {
+                audioInitiated = true;
+                console.log('音频已初始化');
+                
+                setTimeout(() => {
+                    fadeVolume(lowVolume, 1000);
+                    setTimeout(() => {
+                        fadeVolume(normalVolume, 5000);
+                    }, 15000);
+                }, 5000);
+            }).catch(err => {
+                console.log('需要用户交互才能播放音频:', err);
+            });
+            
+            document.removeEventListener('touchstart', initAudioOnInteraction);
+            document.removeEventListener('click', initAudioOnInteraction);
+        }
+
+        // 音量渐变函数
+        function fadeVolume(targetVolume, duration) {
+            const startTime = Date.now();
+            const startVolume = audio.volume;
+            const volumeDiff = targetVolume - startVolume;
+            
+            const fadeInterval = setInterval(() => {
+                const elapsedTime = Date.now() - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                audio.volume = startVolume + volumeDiff * progress;
+                
+                if (progress >= 1 || 
+                    (volumeDiff > 0 && audio.volume >= targetVolume) || 
+                    (volumeDiff < 0 && audio.volume <= targetVolume)) {
+                    audio.volume = targetVolume;
+                    clearInterval(fadeInterval);
+                }
+            }, volumeInterval);
+        }
+
+        // 触摸缩放逻辑
+        container.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const initialDistance = getDistance(touch1, touch2);
+                lastScale = scale;
+                startX = (touch1.clientX + touch2.clientX) / 2 - lastTranslateX;
+                startY = (touch1.clientY + touch2.clientY) / 2 - lastTranslateY;
+            } else if (e.touches.length === 1) {
+                startX = e.touches[0].clientX - lastTranslateX;
+                startY = e.touches[0].clientY - lastTranslateY;
+            }
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            
+            if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getDistance(touch1, touch2);
+                scale = (currentDistance / getDistance(e.touches[0], e.touches[1])) * lastScale;
+                scale = Math.min(Math.max(0.8, scale), 3);
+                translateX = (touch1.clientX + touch2.clientX) / 2 - startX;
+                translateY = (touch1.clientY + touch2.clientY) / 2 - startY;
+            } else if (e.touches.length === 1 && scale > 1) {
+                translateX = e.touches[0].clientX - startX;
+                translateY = e.touches[0].clientY - startY;
+            }
+            
+            updateImageTransform();
+        });
+
+        container.addEventListener('touchend', () => {
+            lastTranslateX = translateX;
+            lastTranslateY = translateY;
+        });
+
+        function getDistance(touch1, touch2) {
+            const dx = touch2.clientX - touch1.clientX;
+            const dy = touch2.clientY - touch1.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function updateImageTransform() {
+            image.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+            image.style.transition = 'transform 0.1s ease';
+        }
+
+        // 禁用右键菜单
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // 页面加载完成后触发淡入、虚化渐变和随机抖动
+        window.addEventListener('load', () => {
+            // 图片淡入和虚化
+            image.style.opacity = '1';
+            image.style.filter = 'blur(0px)';
+            image.style.webkitFilter = 'blur(0px)';
+            
+            // 启动随机抖动
+            startRandomShake();
+        });
+
+        // 监听用户交互事件
+        document.addEventListener('touchstart', initAudioOnInteraction);
+        document.addEventListener('click', initAudioOnInteraction);
+    </script>
+</body>
+</html>
