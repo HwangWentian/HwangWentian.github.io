@@ -7,8 +7,8 @@
     <style>
         @font-face {
                     font-family: "Gabriola";
-                    src: url("Gabriola.woff2");
-                    }
+                     src: url("Gabriola.woff2");
+        }
         /* 全局样式重置 */
         * {
             margin: 0;
@@ -73,7 +73,7 @@
             position: fixed;
             bottom: 20px;
             color: #666;
-            font-size: 20px;
+            font-size: 26px;
             text-align: center;
             opacity: 0.7;
             font-family: "Gabriola", "Microsoft YaHei", "SimHei", cursive;
@@ -99,6 +99,7 @@
         <img id="display-image" src="Dy.webp" alt="分享的图片" loading="lazy">
     </div>
 
+    <!-- 提示文字 -->
     <div class="hint">DYSPROSITOS<br />
         Again thou tread the path by th' rippling pool, <br />
         Where willow fronds kiss waves with softest cool. <br />
@@ -206,6 +207,37 @@
                 }
             }, volumeInterval);
         }
+
+        // 触摸缩放逻辑
+        container.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const initialDistance = getDistance(touch1, touch2);
+                lastScale = scale;
+                startX = (touch1.clientX + touch2.clientX) / 2 - lastTranslateX;
+                startY = (touch1.clientY + touch2.clientY) / 2 - lastTranslateY;
+            } else if (e.touches.length === 1) {
+                startX = e.touches[0].clientX - lastTranslateX;
+                startY = e.touches[0].clientY - lastTranslateY;
+            }
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            
+            if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getDistance(touch1, touch2);
+                scale = (currentDistance / getDistance(e.touches[0], e.touches[1])) * lastScale;
+                scale = Math.min(Math.max(0.8, scale), 3);
+                translateX = (touch1.clientX + touch2.clientX) / 2 - startX;
+                translateY = (touch1.clientY + touch2.clientY) / 2 - startY;
+            } else if (e.touches.length === 1 && scale > 1) {
+                translateX = e.touches[0].clientX - startX;
+                translateY = e.touches[0].clientY - startY;
+            }
             
             updateImageTransform();
         });
@@ -245,7 +277,4 @@
         document.addEventListener('click', initAudioOnInteraction);
     </script>
 </body>
-
 </html>
-
-
