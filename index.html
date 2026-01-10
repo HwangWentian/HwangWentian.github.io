@@ -46,8 +46,8 @@
             -webkit-touch-callout: none;
             -webkit-user-drag: none;
             opacity: 0;
-            filter: blur(50px);
-            -webkit-filter: blur(50px);
+            filter: blur(52px);
+            -webkit-filter: blur(52px);
             transition: 
                 opacity 3s ease-out,
                 filter 52s linear,
@@ -69,7 +69,7 @@
             position: fixed;
             bottom: 20px;
             color: #666;
-            font-size: 14px;
+            font-size: 52px;
             text-align: center;
             opacity: 0.7;
             font-family: "Segoe Script", "Microsoft YaHei", "SimHei", cursive;
@@ -92,7 +92,7 @@
     <!-- 图片容器 -->
     <div class="image-container" id="container">
         <div class="image-overlay"></div>
-        <img id="display-image" src="Dy.png" alt="分享的图片" loading="lazy">
+        <img id="display-image" src="Dy.webp" alt="分享的图片" loading="lazy">
     </div>
 
     <!-- 提示文字 -->
@@ -134,11 +134,11 @@
         // ---------------------- 随机抖动核心逻辑 ----------------------
         // 随机抖动配置
         const shakeConfig = {
-            baseTranslate: 1.5,    // 基础位移像素（大概率）
-            baseRotate: 1,       // 基础旋转角度（大概率）
-            strongTranslate: 5,    // 强化位移像素（小概率）
-            strongRotate: 2.0,     // 强化旋转角度（小概率）
-            strongProbability: 0.1, // 触发强化抖动的概率（10%）
+            baseTranslate: 5.2,    // 基础位移像素（大概率）
+            baseRotate: 3,       // 基础旋转角度（大概率）
+            strongTranslate: 12,    // 强化位移像素（小概率）
+            strongRotate: 5.0,     // 强化旋转角度（小概率）
+            strongProbability: 0.520, // 触发强化抖动的概率（10%）
             interval: 5207           // 抖动更新间隔（毫秒）
         };
 
@@ -273,5 +273,4 @@
         document.addEventListener('click', initAudioOnInteraction);
     </script>
 </body>
-
 </html>
