@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 ↔ AUCG密码子转换器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c3b2e 0%, #1a936f 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .converter-box {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 550px;
+        }
+        
+        .box-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #1a936f;
+        }
+        
+        .box-header i {
+            font-size: 1.8rem;
+            color: #1a936f;
+            margin-right: 15px;
+        }
+        
+        .box-header h2 {
+            font-size: 1.8rem;
+            color: #114b5f;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #114b5f;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border 0.3s;
+            font-family: monospace;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #1a936f;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+        
+        .btn-convert {
+            background-color: #1a936f;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-convert:hover {
+            background-color: #147a5c;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 147, 111, 0.4);
+        }
+        
+        .btn-clear {
+            background-color: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-clear:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-copy {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-copy:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+        }
+        
+        .btn-copy.copied {
+            background-color: #28a745;
+        }
+        
+        .btn-swap {
+            background-color: #114b5f;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-swap:hover {
+            background-color: #0d3a4a;
+            transform: translateY(-3px);
+        }
+        
+        .count {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+            text-align: right;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .converter-box {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .btn-group {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-dna"></i> Base64 ↔ AUCG密码子转换器</h1>
+        </header>
+        
+        <div class="main-content">
+            <div class="converter-box">
+                <div class="box-header">
+                    <i class="fas fa-keyboard"></i>
+                    <h2>文本输入</h2>
+                </div>
+                <div class="input-group">
+                    <label for="textInput">输入文本：</label>
+                    <textarea id="textInput" placeholder="在此输入文本...">Hello DNA!</textarea>
+                    <div class="count">字符数: <span id="textCount">0</span></div>
+                </div>
+                
+                <div class="controls">
+                    <div class="btn-group">
+                        <button class="btn-convert" id="toCodonBtn">
+                            <i class="fas fa-arrow-down"></i> 转换为密码子
+                        </button>
+                        <button class="btn-copy" id="copyTextBtn">
+                            <i class="fas fa-copy"></i> 复制文本
+                        </button>
+                    </div>
+                    <button class="btn-clear" id="clearTextBtn">
+                        <i class="fas fa-eraser"></i> 清空
+                    </button>
+                </div>
+            </div>
+            
+            <div class="converter-box">
+                <div class="box-header">
+                    <i class="fas fa-dna"></i>
+                    <h2>AUCG 密码子序列输出</h2>
+                </div>
+                <div class="input-group">
+                    <label for="codonInput">密码子序列：</label>
+                    <textarea id="codonInput" placeholder="5'-CAGACGGCAUCCUGGCCUAG-3'">5'-CAGACGGCAUCCUGGCCUAG-3'</textarea>
+                    <div class="count">密码子数: <span id="codonCount">0</span></div>
+                </div>
+                
+                <div class="controls">
+                    <div class="btn-group">
+                        <button class="btn-convert" id="toTextBtn">
+                            <i class="fas fa-arrow-up"></i> 转换为文本
+                        </button>
+                        <button class="btn-copy" id="copyCodonBtn">
+                            <i class="fas fa-copy"></i> 复制序列
+                        </button>
+                    </div>
+                    <button class="btn-clear" id="clearCodonBtn">
+                        <i class="fas fa-eraser"></i> 清空
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base64字符与密码子的完整映射表
+        const codonMap = {
+            // 大写字母 A-Z
+            'A': 'AAA', 'B': 'AAC', 'C': 'AAG', 'D': 'AAU',
+            'E': 'ACA', 'F': 'ACC', 'G': 'ACG', 'H': 'ACU',
+            'I': 'AGA', 'J': 'AGC', 'K': 'AGG', 'L': 'AGU',
+            'M': 'AUA', 'N': 'AUC', 'O': 'AUG', 'P': 'AUU',
+            'Q': 'CAA', 'R': 'CAC', 'S': 'CAG', 'T': 'CAU',
+            'U': 'CCA', 'V': 'CCC', 'W': 'CCG', 'X': 'CCU',
+            'Y': 'CGA', 'Z': 'CGC',
+            // 小写字母 a-z
+            'a': 'CGG', 'b': 'CGU', 'c': 'CUA', 'd': 'CUC',
+            'e': 'CUG', 'f': 'CUU', 'g': 'GAA', 'h': 'GAC',
+            'i': 'GAG', 'j': 'GAU', 'k': 'GCA', 'l': 'GCC',
+            'm': 'GCG', 'n': 'GCU', 'o': 'GGA', 'p': 'GGC',
+            'q': 'GGG', 'r': 'GGU', 's': 'GUA', 't': 'GUC',
+            'u': 'GUG', 'v': 'GUU', 'w': 'UAA', 'x': 'UAC',
+            'y': 'UAG', 'z': 'UAU',
+            // 数字 0-9
+            '0': 'UCA', '1': 'UCC', '2': 'UCG', '3': 'UCU',
+            '4': 'UGA', '5': 'UGC', '6': 'UGG', '7': 'UGU',
+            '8': 'UUA', '9': 'UUC',
+            // 特殊字符 +, /
+            '+': 'UUG', '/': 'UUU',
+            // 填充字符 = 映射为起始密码子 AUG
+            '=': 'AUG'
+        };
+        
+        // 反向映射表：密码子 -> Base64字符
+        const base64Map = {};
+        for (const [key, value] of Object.entries(codonMap)) {
+            base64Map[value] = key;
+        }
+        
+        // DOM元素
+        const textInput = document.getElementById('textInput');
+        const codonInput = document.getElementById('codonInput');
+        const toCodonBtn = document.getElementById('toCodonBtn');
+        const toTextBtn = document.getElementById('toTextBtn');
+        const clearTextBtn = document.getElementById('clearTextBtn');
+        const clearCodonBtn = document.getElementById('clearCodonBtn');
+        const copyTextBtn = document.getElementById('copyTextBtn');
+        const copyCodonBtn = document.getElementById('copyCodonBtn');
+        const textCount = document.getElementById('textCount');
+        const codonCount = document.getElementById('codonCount');
+        
+        // 初始化字符计数
+        updateCounts();
+        
+        // 文本转换为密码子序列
+        toCodonBtn.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            if (!text) {
+                alert('请输入文本');
+                return;
+            }
+            
+            try {
+                // 将文本转换为Base64
+                const base64Text = btoa(unescape(encodeURIComponent(text)));
+                
+                // 将Base64转换为密码子序列（无空格）
+                const codonSequence = convertToCodonsNoSpace(base64Text);
+                
+                // 添加5'和3'标记
+                codonInput.value = `5'-${codonSequence}-3'`;
+                
+                updateCounts();
+            } catch (error) {
+                alert('转换出错：' + error.message);
+            }
+        });
+        
+        // 密码子序列转换为文本
+        toTextBtn.addEventListener('click', () => {
+            const codonText = codonInput.value.trim();
+            if (!codonText) {
+                alert('请输入密码子序列');
+                return;
+            }
+            
+            try {
+                // 检查密码子序列格式是否正确（以5'-开头，-3'结尾）
+                const formatRegex = /^5'-[AUCG]+-3'$/i;
+                if (!formatRegex.test(codonText)) {
+                    alert('密码子序列格式不正确！请使用格式：5\'-XXX-3\'（无空格）');
+                    return;
+                }
+                
+                // 提取中间的密码子序列
+                const codonSequence = codonText.substring(3, codonText.length - 3);
+                
+                // 转换为大写
+                const cleanedCodonText = codonSequence.toUpperCase();
+                
+                // 检查长度是否为3的倍数
+                if (cleanedCodonText.length % 3 !== 0) {
+                    alert('密码子序列长度必须是3的倍数（每个密码子由3个碱基组成）');
+                    return;
+                }
+                
+                // 检查是否只包含有效密码子
+                for (let i = 0; i < cleanedCodonText.length; i += 3) {
+                    const codon = cleanedCodonText.substring(i, i + 3);
+                    if (!base64Map[codon]) {
+                        alert(`发现无效密码子：${codon}。密码子必须由A、U、C、G组成。`);
+                        return;
+                    }
+                }
+                
+                // 将密码子序列转换为Base64
+                const base64Result = convertFromCodons(cleanedCodonText);
+                
+                // 将Base64解码为文本
+                const decodedText = decodeURIComponent(escape(atob(base64Result)));
+                textInput.value = decodedText;
+                
+                updateCounts();
+            } catch (error) {
+                alert('转换出错：' + error.message);
+            }
+        });
+        
+        // 清空文本输入
+        clearTextBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateCounts();
+        });
+        
+        // 清空密码子输入
+        clearCodonBtn.addEventListener('click', () => {
+            codonInput.value = '';
+            updateCounts();
+        });
+        
+        // 复制文本内容
+        copyTextBtn.addEventListener('click', () => {
+            if (!textInput.value.trim()) {
+                alert('没有内容可复制');
+                return;
+            }
+            
+            textInput.select();
+            textInput.setSelectionRange(0, 99999); // 对于移动设备
+            
+            try {
+                navigator.clipboard.writeText(textInput.value).then(() => {
+                    showCopyFeedback(copyTextBtn);
+                }).catch(err => {
+                    // 如果clipboard API失败，使用document.execCommand作为后备
+                    document.execCommand('copy');
+                    showCopyFeedback(copyTextBtn);
+                });
+            } catch (err) {
+                // 使用document.execCommand作为最终后备
+                document.execCommand('copy');
+                showCopyFeedback(copyTextBtn);
+            }
+        });
+        
+        // 复制密码子序列
+        copyCodonBtn.addEventListener('click', () => {
+            if (!codonInput.value.trim()) {
+                alert('没有内容可复制');
+                return;
+            }
+            
+            codonInput.select();
+            codonInput.setSelectionRange(0, 99999); // 对于移动设备
+            
+            try {
+                navigator.clipboard.writeText(codonInput.value).then(() => {
+                    showCopyFeedback(copyCodonBtn);
+                }).catch(err => {
+                    // 如果clipboard API失败，使用document.execCommand作为后备
+                    document.execCommand('copy');
+                    showCopyFeedback(copyCodonBtn);
+                });
+            } catch (err) {
+                // 使用document.execCommand作为最终后备
+                document.execCommand('copy');
+                showCopyFeedback(copyCodonBtn);
+            }
+        });
+        
+        // 显示复制成功反馈
+        function showCopyFeedback(button) {
+            const originalText = button.innerHTML;
+            const originalClass = button.className;
+            
+            button.innerHTML = '<i class="fas fa-check"></i> 已复制';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.className = originalClass;
+            }, 2000);
+        }
+        
+        // 更新字符计数
+        function updateCounts() {
+            textCount.textContent = textInput.value.length;
+            
+            // 计算密码子数量（每3个字符为一个密码子）
+            // 先移除5'和3'标记
+            let codonText = codonInput.value;
+            if (codonText.startsWith("5'-") && codonText.endsWith("-3'")) {
+                codonText = codonText.substring(3, codonText.length - 3);
+            }
+            const cleanedCodonText = codonText.toUpperCase().replace(/[^AUCG]/g, '');
+            codonCount.textContent = Math.floor(cleanedCodonText.length / 3);
+        }
+        
+        // 将Base64字符串转换为密码子序列（无空格）
+        function convertToCodonsNoSpace(base64Str) {
+            let result = '';
+            for (let i = 0; i < base64Str.length; i++) {
+                const char = base64Str.charAt(i);
+                if (codonMap[char]) {
+                    result += codonMap[char];
+                } else {
+                    // 对于不在映射表中的字符，使用填充字符的映射
+                    result += codonMap['='];
+                }
+            }
+            return result;
+        }
+        
+        // 将密码子序列转换为Base64字符串
+        function convertFromCodons(codonStr) {
+            let result = '';
+            
+            // 每3个字符一组处理
+            for (let i = 0; i < codonStr.length; i += 3) {
+                const codon = codonStr.substring(i, i + 3);
+                if (base64Map[codon]) {
+                    result += base64Map[codon];
+                } else {
+                    // 对于无效密码子，使用填充字符
+                    result += '=';
+                }
+            }
+            
+            return result;
+        }
+        
+        // 输入时更新计数
+        textInput.addEventListener('input', updateCounts);
+        codonInput.addEventListener('input', updateCounts);
+        
+        // 页面加载时设置示例
+        window.addEventListener('load', () => {
+            // 设置示例文本
+            const exampleText = "Hello DNA!";
+            textInput.value = exampleText;
+            
+            // 自动转换为密码子示例
+            const base64Example = btoa(unescape(encodeURIComponent(exampleText)));
+            const codonExample = convertToCodonsNoSpace(base64Example);
+            codonInput.value = `5'-${codonExample}-3'`;
+            
+            updateCounts();
+        });
+    </script>
+</body>
+</html>
