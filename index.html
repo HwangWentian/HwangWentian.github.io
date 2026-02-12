@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>Base64 ↔ AUCG密码子转换器 · 自适应增强版</title>
+  <title>Base64 ↔ AUCG密码子转换器</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* 重置与全局设计 */
@@ -27,7 +27,7 @@
 
     .container {
       width: 100%;
-      max-width: 1400px;  /* 宽屏也保持舒适宽度 */
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -61,7 +61,6 @@
       line-height: 1.5;
     }
 
-    /* ========= 自适应核心布局 ========= */
     .main-content {
       display: flex;
       flex-wrap: wrap;
@@ -75,9 +74,9 @@
       border-radius: 28px;
       box-shadow: 0 20px 35px rgba(0, 20, 10, 0.35);
       padding: 28px 26px;
-      flex: 1 1 380px;    /* 理想宽度380px，允许收缩和扩展 */
-      min-width: 280px;    /* 极小屏不溢出 */
-      max-width: 600px;    /* 单个盒子最大宽度，防止过于宽大 */
+      flex: 1 1 380px;
+      min-width: 280px;
+      max-width: 600px;
       transition: all 0.2s ease;
       border: 1px solid rgba(255,255,255,0.2);
     }
@@ -341,7 +340,7 @@
         <i class="fas fa-exchange-alt" style="font-size: 1.8rem;"></i>
       </h1>
       <div class="subtitle">
-        文本 ↔ Base64 ↔ 三碱基密码子 · 全映射转换
+        文本 ↔ 三碱基密码子
       </div>
     </header>
 
@@ -407,9 +406,6 @@
         </div>
       </div>
     </div>
-    <footer>
-      <i class="fas fa-table"></i> 65字符 ↔ 64密码子 + AUG起始符
-    </footer>
   </div>
 
   <script>
@@ -618,3 +614,4 @@
   </script>
 </body>
 </html>
+
