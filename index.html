@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黄の转换器 · 5'-(密码子)-3'</title>
+    <title>黄の转换器</title>
     <style>
         * {
             box-sizing: border-box;
@@ -256,23 +256,22 @@
 <body>
 <div class="tool-container">
     <h1>
-        ? 文本 ? 密码子 (5'-3')
-        <span>AUCG + 随机填充</span>
+        文本转密码子 (5'-3')
     </h1>
-    <div class="subhead">左侧文本 → Base64（等号→随机碱基）→ 右侧密码子 · 右侧按碱基数模3恢复等号</div>
+    <div class="subhead">老子改了一天一夜，快给我说谢谢</div>
 
     <div class="double-panel">
         <!-- 左侧：纯文本输入框 -->
         <div class="io-card" id="leftCard">
             <div class="card-header">
-                <div class="title">? 纯文本</div>
+                <div class="title">纯文本</div>
                 <div class="badge">UTF-8</div>
             </div>
             <textarea id="textInput" class="main-input" placeholder="输入任意文本..."></textarea>
             
             <div class="button-strip">
-                <button class="btn primary" id="encodeBtn">?? 转成密码子</button>
-                <button class="btn" id="clearTextBtn">? 清空</button>
+                <button class="btn primary" id="encodeBtn">转成密码子</button>
+                <button class="btn" id="clearTextBtn">清空</button>
                 <span class="small-hint">字符数 <span id="textCharCount">0</span></span>
             </div>
         </div>
@@ -280,28 +279,28 @@
         <!-- 右侧：密码子输入框 (带5'/3'标识) -->
         <div class="io-card" id="rightCard">
             <div class="card-header">
-                <div class="title">? 密码子 (5'-3')</div>
+                <div class="title">密码子</div>
                 <div class="badge">A/U/C/G</div>
             </div>
-            <textarea id="codonInput" class="main-input" placeholder="例如：AAACCCUUG... 仅大写AUCG (含随机填充)"></textarea>
+            <textarea id="codonInput" class="main-input" placeholder="例如：AAACCCUUG..."></textarea>
             
             <div class="button-strip">
-                <button class="btn primary" id="decodeBtn">?? 转成文字</button>
-                <button class="btn" id="clearCodonBtn">? 清空</button>
+                <button class="btn primary" id="decodeBtn">转成文字</button>
+                <button class="btn" id="clearCodonBtn">清空</button>
                 <span class="small-hint">长度 <span id="codonCharCount">0</span></span>
             </div>
 
             <!-- 专属复制/粘贴按钮行 (右侧) -->
             <div class="clipboard-row">
-                <button class="btn" id="copyCodonBtn" title="复制右侧密码子内容">? 复制</button>
-                <button class="btn" id="pasteCodonBtn" title="粘贴到右侧密码子框">? 粘贴</button>
+                <button class="btn" id="copyCodonBtn" title="复制右侧密码子内容">复制</button>
+                <button class="btn" id="pasteCodonBtn" title="粘贴到右侧密码子框">粘贴</button>
                 <span style="flex:1; text-align:right; font-size:0.75rem; color:#3d6f94;">授权粘贴</span>
             </div>
         </div>
     </div>
 
     <div class="footer-note">
-        <button class="clear-all-btn" id="clearAllBtn">? 清空两个输入框</button>
+        <button class="clear-all-btn" id="clearAllBtn">清空两个输入框</button>
         <span class="format-tag">5'-(AUCG...)-3'</span>
     </div>
 </div>
@@ -589,3 +588,4 @@
 </script>
 </body>
 </html>
+
