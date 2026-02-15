@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>»Æ¤Î×ª»»Æ÷ ¡¤ 5'-(ÃÜÂë×Ó)-3'</title>
+    <title>é»„ã®è½¬æ¢å™¨ Â· 5'-(å¯†ç å­)-3'</title>
     <style>
         * {
             box-sizing: border-box;
@@ -256,59 +256,59 @@
 <body>
 <div class="tool-container">
     <h1>
-        ? ÎÄ±¾ ? ÃÜÂë×Ó (5'-3')
-        <span>AUCG + Ëæ»úÌî³ä</span>
+        ? æ–‡æœ¬ ? å¯†ç å­ (5'-3')
+        <span>AUCG + éšæœºå¡«å……</span>
     </h1>
-    <div class="subhead">×ó²àÎÄ±¾ ¡ú Base64£¨µÈºÅ¡úËæ»ú¼î»ù£©¡ú ÓÒ²àÃÜÂë×Ó ¡¤ ÓÒ²à°´¼î»ùÊıÄ£3»Ö¸´µÈºÅ</div>
+    <div class="subhead">å·¦ä¾§æ–‡æœ¬ â†’ Base64ï¼ˆç­‰å·â†’éšæœºç¢±åŸºï¼‰â†’ å³ä¾§å¯†ç å­ Â· å³ä¾§æŒ‰ç¢±åŸºæ•°æ¨¡3æ¢å¤ç­‰å·</div>
 
     <div class="double-panel">
-        <!-- ×ó²à£º´¿ÎÄ±¾ÊäÈë¿ò -->
+        <!-- å·¦ä¾§ï¼šçº¯æ–‡æœ¬è¾“å…¥æ¡† -->
         <div class="io-card" id="leftCard">
             <div class="card-header">
-                <div class="title">? ´¿ÎÄ±¾</div>
+                <div class="title">? çº¯æ–‡æœ¬</div>
                 <div class="badge">UTF-8</div>
             </div>
-            <textarea id="textInput" class="main-input" placeholder="ÊäÈëÈÎÒâÎÄ±¾..."></textarea>
+            <textarea id="textInput" class="main-input" placeholder="è¾“å…¥ä»»æ„æ–‡æœ¬..."></textarea>
             
             <div class="button-strip">
-                <button class="btn primary" id="encodeBtn">?? ×ª³ÉÃÜÂë×Ó</button>
-                <button class="btn" id="clearTextBtn">? Çå¿Õ</button>
-                <span class="small-hint">×Ö·ûÊı <span id="textCharCount">0</span></span>
+                <button class="btn primary" id="encodeBtn">?? è½¬æˆå¯†ç å­</button>
+                <button class="btn" id="clearTextBtn">? æ¸…ç©º</button>
+                <span class="small-hint">å­—ç¬¦æ•° <span id="textCharCount">0</span></span>
             </div>
         </div>
 
-        <!-- ÓÒ²à£ºÃÜÂë×ÓÊäÈë¿ò (´ø5'/3'±êÊ¶) -->
+        <!-- å³ä¾§ï¼šå¯†ç å­è¾“å…¥æ¡† (å¸¦5'/3'æ ‡è¯†) -->
         <div class="io-card" id="rightCard">
             <div class="card-header">
-                <div class="title">? ÃÜÂë×Ó (5'-3')</div>
+                <div class="title">? å¯†ç å­ (5'-3')</div>
                 <div class="badge">A/U/C/G</div>
             </div>
-            <textarea id="codonInput" class="main-input" placeholder="ÀıÈç£ºAAACCCUUG... ½ö´óĞ´AUCG (º¬Ëæ»úÌî³ä)"></textarea>
+            <textarea id="codonInput" class="main-input" placeholder="ä¾‹å¦‚ï¼šAAACCCUUG... ä»…å¤§å†™AUCG (å«éšæœºå¡«å……)"></textarea>
             
             <div class="button-strip">
-                <button class="btn primary" id="decodeBtn">?? ×ª³ÉÎÄ×Ö</button>
-                <button class="btn" id="clearCodonBtn">? Çå¿Õ</button>
-                <span class="small-hint">³¤¶È <span id="codonCharCount">0</span></span>
+                <button class="btn primary" id="decodeBtn">?? è½¬æˆæ–‡å­—</button>
+                <button class="btn" id="clearCodonBtn">? æ¸…ç©º</button>
+                <span class="small-hint">é•¿åº¦ <span id="codonCharCount">0</span></span>
             </div>
 
-            <!-- ×¨Êô¸´ÖÆ/Õ³Ìù°´Å¥ĞĞ (ÓÒ²à) -->
+            <!-- ä¸“å±å¤åˆ¶/ç²˜è´´æŒ‰é’®è¡Œ (å³ä¾§) -->
             <div class="clipboard-row">
-                <button class="btn" id="copyCodonBtn" title="¸´ÖÆÓÒ²àÃÜÂë×ÓÄÚÈİ">? ¸´ÖÆ</button>
-                <button class="btn" id="pasteCodonBtn" title="Õ³Ìùµ½ÓÒ²àÃÜÂë×Ó¿ò">? Õ³Ìù</button>
-                <span style="flex:1; text-align:right; font-size:0.75rem; color:#3d6f94;">ÊÚÈ¨Õ³Ìù</span>
+                <button class="btn" id="copyCodonBtn" title="å¤åˆ¶å³ä¾§å¯†ç å­å†…å®¹">? å¤åˆ¶</button>
+                <button class="btn" id="pasteCodonBtn" title="ç²˜è´´åˆ°å³ä¾§å¯†ç å­æ¡†">? ç²˜è´´</button>
+                <span style="flex:1; text-align:right; font-size:0.75rem; color:#3d6f94;">æˆæƒç²˜è´´</span>
             </div>
         </div>
     </div>
 
     <div class="footer-note">
-        <button class="clear-all-btn" id="clearAllBtn">? Çå¿ÕÁ½¸öÊäÈë¿ò</button>
+        <button class="clear-all-btn" id="clearAllBtn">? æ¸…ç©ºä¸¤ä¸ªè¾“å…¥æ¡†</button>
         <span class="format-tag">5'-(AUCG...)-3'</span>
     </div>
 </div>
 
 <script>
     (function() {
-        // ---------- ¹Ì¶¨ÃÜÂë×ÓÓ³Éä (ÓëÔ­À´ÍêÈ«Ò»ÖÂ) ----------
+        // ---------- å›ºå®šå¯†ç å­æ˜ å°„ (ä¸åŸæ¥å®Œå…¨ä¸€è‡´) ----------
         const codonMap = {
             'A':'AAA','B':'AAC','C':'AAG','D':'AAU','E':'ACA','F':'ACC','G':'ACG','H':'ACU','I':'AGA','J':'AGC','K':'AGG','L':'AGU','M':'AUA','N':'AUC','O':'AUG','P':'AUU','Q':'CAA','R':'CAC','S':'CAG','T':'CAU','U':'CCA','V':'CCC','W':'CCG','X':'CCU','Y':'CGA','Z':'CGC',
             'a':'CGG','b':'CGU','c':'CUA','d':'CUC','e':'CUG','f':'CUU','g':'GAA','h':'GAC','i':'GAG','j':'GAU','k':'GCA','l':'GCC','m':'GCG','n':'GCU','o':'GGA','p':'GGC','q':'GGG','r':'GGU','s':'GUA','t':'GUC','u':'GUG','v':'GUU','w':'UAA','x':'UAC','y':'UAG','z':'UAU',
@@ -320,13 +320,13 @@
             reverseCodonMap[codon] = base64Char;
         }
 
-        // Ëæ»ú¼î»ùÉú³ÉÆ÷ (A,U,C,G)
+        // éšæœºç¢±åŸºç”Ÿæˆå™¨ (A,U,C,G)
         function randomBase() {
             const bases = ['A', 'U', 'C', 'G'];
             return bases[Math.floor(Math.random() * 4)];
         }
 
-        // ---------- DOM ÔªËØ ----------
+        // ---------- DOM å…ƒç´  ----------
         const textInput = document.getElementById('textInput');
         const codonInput = document.getElementById('codonInput');
         const encodeBtn = document.getElementById('encodeBtn');
@@ -339,7 +339,7 @@
         const textCharCount = document.getElementById('textCharCount');
         const codonCharCount = document.getElementById('codonCharCount');
 
-        // ---------- ¸¨Öúº¯Êı ----------
+        // ---------- è¾…åŠ©å‡½æ•° ----------
         function updateCounts() {
             textCharCount.textContent = textInput.value.length;
             codonCharCount.textContent = codonInput.value.length;
@@ -350,7 +350,7 @@
             setTimeout(() => element.classList.remove('error-flash'), 500);
         }
 
-        // ========== ±àÂë: ÎÄ±¾ -> Base64 (´¦ÀíµÈºÅ) -> ÃÜÂë×Ó (Ìí¼Ó5'/3'°ü×°) ==========
+        // ========== ç¼–ç : æ–‡æœ¬ -> Base64 (å¤„ç†ç­‰å·) -> å¯†ç å­ (æ·»åŠ 5'/3'åŒ…è£…) ==========
         function encodeTextToCodon() {
             const rawText = textInput.value;
             if (rawText === '') {
@@ -360,51 +360,51 @@
             }
 
             try {
-                // 1. ÎÄ±¾ -> UTF-8×Ö½Ú -> Base64
+                // 1. æ–‡æœ¬ -> UTF-8å­—èŠ‚ -> Base64
                 const utf8Bytes = new TextEncoder().encode(rawText);
                 let binary = '';
                 for (let i = 0; i < utf8Bytes.length; i++) {
                     binary += String.fromCharCode(utf8Bytes[i]);
                 }
-                let base64Str = btoa(binary);  // ¿ÉÄÜ°üº¬Ò»¸ö»òÁ½¸öµÈºÅ
+                let base64Str = btoa(binary);  // å¯èƒ½åŒ…å«ä¸€ä¸ªæˆ–ä¸¤ä¸ªç­‰å·
 
-                // 2. ¼Ç×¡µÈºÅÊıÁ¿£¬²¢ÒÆ³ıµÈºÅ (ÓÃËæ»ú¼î»ù´úÌæ)
+                // 2. è®°ä½ç­‰å·æ•°é‡ï¼Œå¹¶ç§»é™¤ç­‰å· (ç”¨éšæœºç¢±åŸºä»£æ›¿)
                 let equalSignCount = 0;
                 if (base64Str.endsWith('==')) {
                     equalSignCount = 2;
-                    base64Str = base64Str.slice(0, -2); // È¥µôÁ½¸öµÈºÅ
+                    base64Str = base64Str.slice(0, -2); // å»æ‰ä¸¤ä¸ªç­‰å·
                 } else if (base64Str.endsWith('=')) {
                     equalSignCount = 1;
-                    base64Str = base64Str.slice(0, -1); // È¥µôÒ»¸öµÈºÅ
+                    base64Str = base64Str.slice(0, -1); // å»æ‰ä¸€ä¸ªç­‰å·
                 }
 
-                // 3. ½«Base64Ã¿¸ö×Ö·û(²»º¬µÈºÅ)×ªÎªÃÜÂë×ÓÈıÁªÌå
+                // 3. å°†Base64æ¯ä¸ªå­—ç¬¦(ä¸å«ç­‰å·)è½¬ä¸ºå¯†ç å­ä¸‰è”ä½“
                 let codonResult = '';
                 for (let i = 0; i < base64Str.length; i++) {
                     const ch = base64Str[i];
                     const codon = codonMap[ch];
                     if (!codon) {
-                        throw new Error(`ÎŞĞ§Base64×Ö·û: ${ch}`);
+                        throw new Error(`æ— æ•ˆBase64å­—ç¬¦: ${ch}`);
                     }
                     codonResult += codon;
                 }
 
-                // 4. ²¹ÉÏËæ»ú¼î»ù£ºµÈºÅÊıÁ¿¸öËæ»ú¼î»ù (×÷ÎªÌî³ä)
+                // 4. è¡¥ä¸Šéšæœºç¢±åŸºï¼šç­‰å·æ•°é‡ä¸ªéšæœºç¢±åŸº (ä½œä¸ºå¡«å……)
                 for (let e = 0; e < equalSignCount; e++) {
                     codonResult += randomBase();
                 }
 
-                // 5. °ü×°³É 5'-(...)-3' ¸ñÊ½ (½öÕ¹Ê¾£¬½âÂëÊ±×Ô¶¯È¥³ı)
+                // 5. åŒ…è£…æˆ 5'-(...)-3' æ ¼å¼ (ä»…å±•ç¤ºï¼Œè§£ç æ—¶è‡ªåŠ¨å»é™¤)
                 codonInput.value = `5'-${codonResult}-3'`;
             } catch (e) {
-                console.warn('±àÂëÊ§°Ü:', e);
-                codonInput.value = '[±àÂë´íÎó]';
+                console.warn('ç¼–ç å¤±è´¥:', e);
+                codonInput.value = '[ç¼–ç é”™è¯¯]';
                 shakeElement(document.getElementById('leftCard'));
             }
             updateCounts();
         }
 
-        // ========== ÖØĞ´½âÂë: ÃÜÂë×Ó -> Base64 (¸ù¾İ¼î»ùÊıÄ£3ÍÆ¶ÏµÈºÅ) -> ÎÄ±¾ ==========
+        // ========== é‡å†™è§£ç : å¯†ç å­ -> Base64 (æ ¹æ®ç¢±åŸºæ•°æ¨¡3æ¨æ–­ç­‰å·) -> æ–‡æœ¬ ==========
         function decodeCodonToText() {
             let rawCodon = codonInput.value;
             if (rawCodon.trim() === '') {
@@ -414,30 +414,30 @@
             }
 
             try {
-                // 1. ÒÆ³ıËùÓĞ¿Õ°×¡¢»»ĞĞ£¬Í¬Ê±È¥µô¿ÉÑ¡µÄ 5'- ºÍ -3' Ç°×º/ºó×º (ÔöÇ¿Â³°ôĞÔ)
+                // 1. ç§»é™¤æ‰€æœ‰ç©ºç™½ã€æ¢è¡Œï¼ŒåŒæ—¶å»æ‰å¯é€‰çš„ 5'- å’Œ -3' å‰ç¼€/åç¼€ (å¢å¼ºé²æ£’æ€§)
                 let cleaned = rawCodon.replace(/\s+/g, '');
-                // È¥µô 5'-  (Èç¹û´æÔÚ)
+                // å»æ‰ 5'-  (å¦‚æœå­˜åœ¨)
                 if (cleaned.startsWith("5'-")) {
                     cleaned = cleaned.substring(3);
                 }
-                // È¥µô -3' (Èç¹û´æÔÚ)
+                // å»æ‰ -3' (å¦‚æœå­˜åœ¨)
                 if (cleaned.endsWith("-3'")) {
                     cleaned = cleaned.substring(0, cleaned.length - 3);
                 }
-                // »¹¿ÉÄÜ´æÔÚµ¥¶ÀµÄ ' »ò - µÈ£¬Ö»±£ÁôAUCG
+                // è¿˜å¯èƒ½å­˜åœ¨å•ç‹¬çš„ ' æˆ– - ç­‰ï¼Œåªä¿ç•™AUCG
                 cleaned = cleaned.replace(/[^AUCG]/gi, ''); 
                 cleaned = cleaned.toUpperCase();
 
                 if (cleaned.length === 0) {
-                    throw new Error('ÊäÈëÎª¿Õ»òÎŞĞ§');
+                    throw new Error('è¾“å…¥ä¸ºç©ºæˆ–æ— æ•ˆ');
                 }
                 if (!/^[AUCG]+$/.test(cleaned)) {
-                    throw new Error('ÃÜÂë×ÓÖ»ÄÜ°üº¬A¡¢U¡¢C¡¢G');
+                    throw new Error('å¯†ç å­åªèƒ½åŒ…å«Aã€Uã€Cã€G');
                 }
 
-                const totalBases = cleaned.length;          // ¼î»ù×Ü¸öÊı
-                const remainder = totalBases % 3;            // ¼î»ùÊıÄ£3 ¡ú ¾ö¶¨Ìî³äµÄµÈºÅÊıÁ¿
-                let paddingBases;  // Ìî³äµÄ¼î»ù¸öÊı p (0,1,2)
+                const totalBases = cleaned.length;          // ç¢±åŸºæ€»ä¸ªæ•°
+                const remainder = totalBases % 3;            // ç¢±åŸºæ•°æ¨¡3 â†’ å†³å®šå¡«å……çš„ç­‰å·æ•°é‡
+                let paddingBases;  // å¡«å……çš„ç¢±åŸºä¸ªæ•° p (0,1,2)
                 if (remainder === 0) {
                     paddingBases = 0;
                 } else if (remainder === 1) {
@@ -446,28 +446,28 @@
                     paddingBases = 2;
                 }
 
-                // ÕæÊµµÄBase64×Ö·ûÊı (Ã¿¸ö×Ö·û¶ÔÓ¦Ò»¸öÈıÁªÌå)
-                const realCodonCount = (totalBases - paddingBases) / 3;  // Ò»¶¨ÊÇÕûÊı
+                // çœŸå®çš„Base64å­—ç¬¦æ•° (æ¯ä¸ªå­—ç¬¦å¯¹åº”ä¸€ä¸ªä¸‰è”ä½“)
+                const realCodonCount = (totalBases - paddingBases) / 3;  // ä¸€å®šæ˜¯æ•´æ•°
 
-                // 2. ÌáÈ¡Ç° realCodonCount ¸öÈıÁªÌå£¬×ª³Ébase64×Ö·û´®
+                // 2. æå–å‰ realCodonCount ä¸ªä¸‰è”ä½“ï¼Œè½¬æˆbase64å­—ç¬¦ä¸²
                 let base64Str = '';
                 for (let i = 0; i < realCodonCount; i++) {
                     const triplet = cleaned.substr(i * 3, 3);
                     const base64Char = reverseCodonMap[triplet];
                     if (!base64Char) {
-                        throw new Error(`Î´ÖªµÄÃÜÂë×ÓÈıÁªÌå: ${triplet}`);
+                        throw new Error(`æœªçŸ¥çš„å¯†ç å­ä¸‰è”ä½“: ${triplet}`);
                     }
                     base64Str += base64Char;
                 }
 
-                // 3. ¸ù¾İ paddingBases ²¹»ØµÈºÅ
+                // 3. æ ¹æ® paddingBases è¡¥å›ç­‰å·
                 if (paddingBases === 1) {
                     base64Str += '=';
                 } else if (paddingBases === 2) {
                     base64Str += '==';
                 }
 
-                // 4. Base64½âÂë»ØÎÄ±¾
+                // 4. Base64è§£ç å›æ–‡æœ¬
                 const binary = atob(base64Str);
                 const bytes = new Uint8Array(binary.length);
                 for (let i = 0; i < binary.length; i++) {
@@ -476,37 +476,37 @@
                 const decodedText = new TextDecoder().decode(bytes);
                 textInput.value = decodedText;
             } catch (e) {
-                console.warn('½âÂëÊ§°Ü:', e);
-                textInput.value = '[½âÂëÊ§°Ü: ' + e.message + ']';
+                console.warn('è§£ç å¤±è´¥:', e);
+                textInput.value = '[è§£ç å¤±è´¥: ' + e.message + ']';
                 shakeElement(document.getElementById('rightCard'));
             }
             updateCounts();
         }
 
-        // Çå¿Õ×ó²àÎÄ±¾
+        // æ¸…ç©ºå·¦ä¾§æ–‡æœ¬
         function clearTextOnly() {
             textInput.value = '';
             updateCounts();
         }
 
-        // Çå¿ÕÓÒ²àÃÜÂë×Ó
+        // æ¸…ç©ºå³ä¾§å¯†ç å­
         function clearCodonOnly() {
             codonInput.value = '';
             updateCounts();
         }
 
-        // Çå¿ÕÈ«²¿
+        // æ¸…ç©ºå…¨éƒ¨
         function clearAll() {
             textInput.value = '';
             codonInput.value = '';
             updateCounts();
         }
 
-        // ¸´ÖÆÓÒ²àÃÜÂë×ÓÄÚÈİ (±£³ÖÔ­Ê¼ÄÚÈİ£¬²»Ìí¼Ó/É¾³ı¸ñÊ½)
+        // å¤åˆ¶å³ä¾§å¯†ç å­å†…å®¹ (ä¿æŒåŸå§‹å†…å®¹ï¼Œä¸æ·»åŠ /åˆ é™¤æ ¼å¼)
         async function copyCodon() {
             const content = codonInput.value;
             if (!content) {
-                alert('Ã»ÓĞ¿É¸´ÖÆµÄÄÚÈİ');
+                alert('æ²¡æœ‰å¯å¤åˆ¶çš„å†…å®¹');
                 return;
             }
             try {
@@ -514,22 +514,22 @@
                 copyCodonBtn.style.background = '#c7e0b0';
                 setTimeout(() => copyCodonBtn.style.background = '', 200);
             } catch (err) {
-                alert('¸´ÖÆÊ§°Ü: ' + err.message);
+                alert('å¤åˆ¶å¤±è´¥: ' + err.message);
             }
         }
 
-        // Õ³Ìùµ½ÓÒ²àÃÜÂë×Ó¿ò (ÔÊĞíÕ³Ìù´ø5'/3'¸ñÊ½µÄÎÄ±¾)
+        // ç²˜è´´åˆ°å³ä¾§å¯†ç å­æ¡† (å…è®¸ç²˜è´´å¸¦5'/3'æ ¼å¼çš„æ–‡æœ¬)
         async function pasteToCodon() {
             try {
                 const clipboardText = await navigator.clipboard.readText();
                 codonInput.value = clipboardText;
                 updateCounts();
             } catch (err) {
-                alert('ÎŞ·¨Õ³Ìù£¬ÇëÈ·±£ÊÚÓè¼ôÌù°åÈ¨ÏŞ»òÊÖ¶¯ÊäÈë¡£\n' + err.message);
+                alert('æ— æ³•ç²˜è´´ï¼Œè¯·ç¡®ä¿æˆäºˆå‰ªè´´æ¿æƒé™æˆ–æ‰‹åŠ¨è¾“å…¥ã€‚\n' + err.message);
             }
         }
 
-        // ---------- ÊÂ¼ş°ó¶¨ ----------
+        // ---------- äº‹ä»¶ç»‘å®š ----------
         encodeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             encodeTextToCodon();
@@ -565,11 +565,11 @@
             clearAll();
         });
 
-        // ÊµÊ±¼ÆÊı
+        // å®æ—¶è®¡æ•°
         textInput.addEventListener('input', updateCounts);
         codonInput.addEventListener('input', updateCounts);
 
-        // ¼üÅÌ¿ì½İ: Ctrl+Enter ´¥·¢¸÷×Ô×ª»»
+        // é”®ç›˜å¿«æ·: Ctrl+Enter è§¦å‘å„è‡ªè½¬æ¢
         textInput.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 e.preventDefault();
@@ -583,7 +583,7 @@
             }
         });
 
-        // ³õÊ¼¼ÆÊı¸üĞÂ
+        // åˆå§‹è®¡æ•°æ›´æ–°
         updateCounts();
     })();
 </script>
