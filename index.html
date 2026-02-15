@@ -1,615 +1,615 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>Base64 â†” AUCGå¯†ç å­è½¬æ¢å™¨</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* é‡ç½®ä¸å…¨å±€è®¾è®¡ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÎÄ±¾ ? ÃÜÂë×Ó (5'-3') ¡¤ µÈºÅËæ»úÌî³ä</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #e3f0f5 0%, #d4e3ed 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .tool-container {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 32px 36px;
+            box-shadow: 0 30px 50px rgba(18, 52, 77, 0.25), 0 10px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
 
-    body {
-      background: linear-gradient(145deg, #0a332b 0%, #1c7a61 100%);
-      color: #1e2e2f;
-      min-height: 100vh;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.02em;
+            color: #0f344b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h1 span {
+            background: #1f5577;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 5px 14px;
+            border-radius: 60px;
+            margin-left: 12px;
+        }
+        .subhead {
+            color: #2f5575;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            border-left: 4px solid #4982aa;
+            padding-left: 20px;
+            background: rgba(73, 130, 170, 0.1);
+            border-radius: 0 100px 100px 0;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+        .double-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-top: 10px;
+        }
+        @media (max-width: 700px) {
+            .double-panel {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+            .tool-container { padding: 22px; }
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 12px 8px;
-      color: white;
-    }
+        .io-card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px 22px;
+            box-shadow: 0 12px 24px -8px rgba(19, 59, 87, 0.2);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: all 0.15s;
+            display: flex;
+            flex-direction: column;
+        }
+        .io-card:hover {
+            box-shadow: 0 18px 32px -8px #1d4f73a0;
+        }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 8px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .card-header .title {
+            background: #eef4fa;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            color: #123f5f;
+            border: 1px solid #bed9ef;
+        }
+        .card-header .badge {
+            background: none;
+            font-size: 0.9rem;
+            color: #3b6f94;
+        }
 
-    h1 i {
-      color: #ffd966;
-    }
+        .main-input {
+            width: 100%;
+            height: 200px;
+            padding: 18px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+            background: #f3f9ff;
+            border: 2px solid #c6ddef;
+            border-radius: 22px;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s;
+            color: #032436;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.02);
+        }
+        .main-input:focus {
+            border-color: #3174a0;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(57, 128, 177, 0.2), inset 0 2px 4px #cbdbe9;
+        }
 
-    .subtitle {
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.5;
-    }
+        .button-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0 8px 0;
+            align-items: center;
+        }
+        .btn {
+            background: white;
+            border: 1.5px solid #b0cde0;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 550;
+            font-size: 0.9rem;
+            color: #1b4565;
+            cursor: pointer;
+            transition: 0.12s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.02);
+            letter-spacing: 0.3px;
+        }
+        .btn:hover {
+            background: #e2effb;
+            border-color: #4083b0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -5px #2b5f88a0;
+        }
+        .btn.primary {
+            background: #1e5380;
+            border-color: #1e5380;
+            color: white;
+        }
+        .btn.primary:hover {
+            background: #26699f;
+            border-color: #1d5e90;
+        }
 
-    .main-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      justify-content: center;
-    }
+        .clipboard-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+            border-top: 1px dashed #aec9e0;
+            padding-top: 14px;
+            justify-content: flex-start;
+        }
 
-    .converter-box {
-      background-color: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(4px);
-      border-radius: 28px;
-      box-shadow: 0 20px 35px rgba(0, 20, 10, 0.35);
-      padding: 28px 26px;
-      flex: 1 1 380px;
-      min-width: 280px;
-      max-width: 600px;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
+        .small-hint {
+            font-size: 0.75rem;
+            color: #3f6c91;
+            background: #d7e8fa;
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-left: auto;
+        }
 
-    /* é«˜åˆ†è¾¨ç‡æ‰‹æœºæ£€æµ‹ï¼šé€šè¿‡åª’ä½“æŸ¥è¯¢åˆ¤æ–­ç«–å±ä¸”å®½åº¦å……è£•æ—¶ï¼Œ
-       ä¸»åŠ¨è®©ä¸¤ä¸ªç›’å­å„å 45%å·¦å³ï¼Œä¸å†å¹¶æ’è¿‡å®½æµªè´¹ç©ºé—´ã€‚ 
-       åŒæ—¶ä¹Ÿç…§é¡¾åˆ°æŠ˜å å±ã€å¤§å±æ‰‹æœºç«–å±åœºæ™¯ */
-    @media (min-width: 700px) and (max-width: 1024px) and (orientation: portrait) {
-      /* é’ˆå¯¹é«˜åˆ†è¾¨ç‡æ‰‹æœºç«–å± (ä¾‹å¦‚ 390px~450px å®½åº¦, ä½†å¾ˆå¤šé«˜ç«¯æ‰‹æœºå®½åº¦390-430ï¼Œè¿™ä¸ªèŒƒå›´è¦†ç›–æ›´å¤§) 
-         å®é™…å†™ 700px ä»¥ä¸‹å¯ä»¥æ›´å¥½é€‚é…ï¼Œä½†æˆ‘ä»¬å¸Œæœ›ä¿ç•™å¹³æ¿æ¨ªå±ä¼˜åŠ¿ï¼Œå› æ­¤ç«–å±ä¸“ç”¨è°ƒæ•´ */
-      .main-content {
-        justify-content: center;
-      }
-      .converter-box {
-        flex: 0 1 85%;     /* ç«–å±æ‰‹æœºå³ä½¿å®½åˆ†è¾¨ç‡ï¼Œä¹Ÿä¼˜å…ˆå±•ç¤ºå•åˆ—ï¼Œ85%å®½åº¦é¥±æ»¡ */
-        max-width: 550px;
-        margin: 0 auto;
-      }
-    }
+        .status-line {
+            font-size: 0.8rem;
+            color: #22638b;
+            margin-top: 6px;
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-line span {
+            background: #e1effb;
+            padding: 2px 10px;
+            border-radius: 30px;
+        }
 
-    /* é’ˆå¯¹å®½åº¦430px ~ 900px ä¸” ç«–å±çš„ç°ä»£å¤§å±æ‰‹æœºï¼ˆå¦‚iPhone Pro Max, ä¸‰æ˜ŸSç³»åˆ—ç­‰ï¼‰ 
-       å¼ºåˆ¶å †å ï¼Œä¸å¹¶æ’ã€‚è¿™æ˜¯è§£å†³ã€Œé«˜åˆ†è¾¨ç‡æ‰‹æœºåŒæ’æ˜¾ç¤ºã€çš„å…³é”® */
-    @media (min-width: 600px) and (max-width: 950px) and (orientation: portrait) {
-      .main-content {
-        flex-direction: column;
-        align-items: center;
-      }
-      .converter-box {
-        flex: 0 1 auto;
-        width: 92%;
-        max-width: 580px;   /* ç¾è§‚å®½åº¦ */
-      }
-    }
-
-    /* æç«¯å°å±ï¼ˆå°äº480pxï¼‰ */
-    @media (max-width: 480px) {
-      .converter-box {
-        width: 100%;
-        padding: 22px 18px;
-      }
-      h1 {
-        font-size: 1.9rem;
-      }
-    }
-
-    /* æ¨ªå±æˆ–è€…å¹³æ¿ï¼šå…è®¸å¹¶æ’ä½†é™åˆ¶æœ€å¤§å®½åº¦ï¼Œé¿å…å¤ªé•¿é˜…è¯»ä¸é€‚ */
-    @media (min-width: 1025px) {
-      .converter-box {
-        flex: 0 1 calc(50% - 30px);
-        max-width: 550px;
-      }
-    }
-
-    /* ç›’å­å¤´éƒ¨ */
-    .box-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
-      border-bottom: 3px solid #2c9c7a;
-    }
-
-    .box-header i {
-      font-size: 2.1rem;
-      color: #1b7e5e;
-      margin-right: 14px;
-      background: rgba(26,147,111,0.1);
-      padding: 10px;
-      border-radius: 18px;
-    }
-
-    .box-header h2 {
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: #0c4b4f;
-      letter-spacing: -0.01em;
-    }
-
-    .input-group {
-      margin-bottom: 22px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #0d5340;
-      font-size: 1.05rem;
-      letter-spacing: 0.3px;
-    }
-
-    textarea {
-      width: 100%;
-      height: 180px;
-      padding: 18px;
-      border: 2px solid #cfe9e1;
-      border-radius: 20px;
-      font-size: 1.05rem;
-      resize: vertical;
-      transition: 0.2s;
-      font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
-      background-color: #fafefc;
-      line-height: 1.5;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: #1a936f;
-      box-shadow: 0 0 0 4px rgba(26,147,111,0.1);
-      background-color: white;
-    }
-
-    /* æŒ‰é’®åŒºåŸŸä¼˜åŒ– */
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 20px;
-    }
-
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      flex: 1 1 auto;
-    }
-
-    button {
-      padding: 14px 22px;
-      border: none;
-      border-radius: 40px;  /* åœ†æ¶¦ç°ä»£ */
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
-      letter-spacing: 0.3px;
-      border: 1px solid transparent;
-    }
-
-    .btn-convert {
-      background: linear-gradient(145deg, #1a936f, #0f765a);
-      color: white;
-      flex: 1 0 140px;
-    }
-
-    .btn-convert:hover {
-      background: #0e604a;
-      transform: translateY(-4px);
-      box-shadow: 0 12px 20px rgba(26,147,111,0.35);
-    }
-
-    .btn-clear {
-      background-color: #f0f5f3;
-      color: #2c5a4a;
-      border: 1px solid #c2dfd3;
-    }
-
-    .btn-clear:hover {
-      background-color: #e0ece7;
-    }
-
-    .btn-copy {
-      background-color: #3a6b5f;
-      color: white;
-    }
-
-    .btn-copy:hover {
-      background-color: #2b5349;
-      transform: translateY(-3px);
-    }
-
-    .btn-copy.copied {
-      background-color: #2a7a4b;
-    }
-
-    .btn-swap {
-      background-color: #1a4a5c;
-      color: white;
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    .count {
-      margin-top: 16px;
-      font-style: italic;
-      color: #3d655b;
-      text-align: right;
-      font-size: 0.95rem;
-      font-weight: 500;
-      padding-right: 8px;
-      border-top: 1px dashed #b7d9cf;
-      padding-top: 12px;
-    }
-
-    /* é«˜åˆ†è¾¨ç‡æ‰‹æœºç«–å±ç²¾ç»†è°ƒæ•´â€”â€”é‡è¦ï¼šå¢åŠ æ£€æµ‹æœ€é€‚å®œæ˜¾ç¤ºæ–¹å¼ï¼Œåšå†³å †å  */
-    @media (min-height: 700px) and (min-width: 380px) and (max-width: 950px) and (orientation: portrait) {
-      .main-content {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .converter-box {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 0;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-    }
-
-    /* æ›´æ¿€è¿›ï¼šå¯¹äºä»»æ„ç«–å±ä¸”å®½åº¦å°äºç­‰äº900pxçš„è®¾å¤‡ï¼Œå¼ºåˆ¶çºµå‘æ’åˆ— (è¦†ç›–ç»å¤§å¤šæ•°æ‰‹æœº) */
-    @media (orientation: portrait) and (max-width: 900px) {
-      .main-content {
-        flex-direction: column !important;
-        align-items: center;
-      }
-      .converter-box {
-        width: 96% !important;
-        max-width: 560px !important;
-        flex: 0 1 auto !important;
-      }
-    }
-
-    /* å¯¹äºå®½åº¦å¾ˆå°çš„æ¨ªå±ï¼ˆå¦‚æŠ˜å çŠ¶æ€ï¼‰ä¹Ÿé¿å…å¹¶æ’å¤ªæŒ¤ */
-    @media (max-width: 750px) and (orientation: landscape) {
-      .converter-box {
-        flex: 1 1 100%;
-      }
-    }
-
-    /* è§¦æ‘¸åé¦ˆ */
-    button:active {
-      transform: scale(0.96);
-    }
-
-    /* font-awesome é—´è· */
-    i {
-      margin-right: 4px;
-    }
-
-    footer {
-      margin-top: 40px;
-      color: rgba(255,255,255,0.7);
-      text-align: center;
-    }
-  </style>
+        .footer-note {
+            margin-top: 32px;
+            text-align: center;
+            color: #2b5f7a;
+            font-size: 0.85rem;
+            background: #ebf4fc;
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .clear-all-btn {
+            background: transparent;
+            border: 1.5px solid #8fb7d3;
+            padding: 8px 24px;
+            border-radius: 40px;
+            color: #164a6b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .clear-all-btn:hover {
+            background: #ffffffb8;
+            border-color: #5b92bc;
+        }
+        .error-flash {
+            animation: errorShake 0.2s 2 ease;
+        }
+        @keyframes errorShake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>
-        <i class="fas fa-dna"></i> 
-        æ–‡æœ¬è½¬æ¢
-        <i class="fas fa-exchange-alt" style="font-size: 1.8rem;"></i>
-      </h1>
-    </header>
+<div class="tool-container">
+    <h1>
+        ? ÎÄ±¾ ? ÃÜÂë×Ó (5'-3')
+        <span>AUCG + Ëæ»úÌî³ä</span>
+    </h1>
+    <div class="subhead">×ó²à´¿ÎÄ±¾ ¡ú Base64£¨µÈºÅ¡úËæ»ú¼î»ù£© ¡ú ÓÒ²àÃÜÂë×Ó ¡¤ ·´Ïò°´³¤¶ÈÄ£3»Ö¸´µÈºÅ</div>
 
-    <!-- è‡ªé€‚åº”åŒå¡ç‰‡ï¼šæ‰‹æœºç«–å±å¿…å®šçºµå‘å †å ï¼Œå¤§å±å¹¶æ’ä½†èˆ’é€‚ -->
-    <div class="main-content">
-      <!-- å¡ç‰‡1ï¼šæ–‡æœ¬è¾“å…¥åŒº -->
-      <div class="converter-box">
-        <div class="box-header">
-          <i class="fas fa-keyboard"></i>
-          <h2>æ–‡æœ¬è¾“å…¥</h2>
+    <div class="double-panel">
+        <!-- ×ó²à£º´¿ÎÄ±¾ÊäÈë¿ò -->
+        <div class="io-card" id="leftCard">
+            <div class="card-header">
+                <div class="title">? ´¿ÎÄ±¾</div>
+                <div class="badge">UTF-8</div>
+            </div>
+            <textarea id="textInput" class="main-input" placeholder="ÊäÈëÈÎÒâÎÄ±¾..."></textarea>
+            
+            <div class="button-strip">
+                <button class="btn primary" id="encodeBtn">? ×ª³ÉÃÜÂë×Ó</button>
+                <button class="btn" id="clearTextBtn">?? Çå¿Õ</button>
+                <span class="small-hint">×Ö·ûÊı <span id="textCharCount">0</span></span>
+            </div>
         </div>
-        <div class="input-group">
-          <label for="textInput">
-            <i class="fas fa-pencil-alt"></i> åŸå§‹æ–‡æœ¬
-          </label>
-          <textarea id="textInput" placeholder="åœ¨æ­¤è¾“å…¥æ–‡æœ¬ï¼Œä¾‹å¦‚ Hello DNA!">Hello DNA!</textarea>
-          <div class="count">
-            <i class="fas fa-text-height"></i> å­—ç¬¦æ•°: <span id="textCount">0</span>
-          </div>
-        </div>
-        <div class="controls">
-          <div class="btn-group">
-            <button class="btn-convert" id="toCodonBtn">
-              <i class="fas fa-arrow-down"></i> è½¬å¯†ç å­
-            </button>
-            <button class="btn-copy" id="copyTextBtn">
-              <i class="fas fa-copy"></i> å¤åˆ¶
-            </button>
-          </div>
-          <button class="btn-clear" id="clearTextBtn">
-            <i class="fas fa-eraser"></i> æ¸…ç©º
-          </button>
-        </div>
-      </div>
 
-      <!-- å¡ç‰‡2ï¼šå¯†ç å­åºåˆ—åŒº -->
-      <div class="converter-box">
-        <div class="box-header">
-          <i class="fas fa-dna"></i>
-          <h2>AUCG å¯†ç å­</h2>
+        <!-- ÓÒ²à£ºÃÜÂë×ÓÊäÈë¿ò -->
+        <div class="io-card" id="rightCard">
+            <div class="card-header">
+                <div class="title">? ÃÜÂë×Ó (5'-3')</div>
+                <div class="badge">A/U/C/G</div>
+            </div>
+            <textarea id="codonInput" class="main-input" placeholder="ÀıÈç£ºAAACCCUUG... ½ö´óĞ´AUCG (º¬Ëæ»úÌî³ä)"></textarea>
+            
+            <div class="button-strip">
+                <button class="btn primary" id="decodeBtn">? ×ª³ÉÎÄ×Ö</button>
+                <button class="btn" id="clearCodonBtn">?? Çå¿Õ</button>
+                <span class="small-hint">³¤¶È <span id="codonCharCount">0</span></span>
+            </div>
+
+            <!-- ×¨Êô¸´ÖÆ/Õ³Ìù°´Å¥ĞĞ (ÓÒ²à) -->
+            <div class="clipboard-row">
+                <button class="btn" id="copyCodonBtn" title="¸´ÖÆÓÒ²àÃÜÂë×ÓÄÚÈİ">? ¸´ÖÆ</button>
+                <button class="btn" id="pasteCodonBtn" title="Õ³Ìùµ½ÓÒ²àÃÜÂë×Ó¿ò">? Õ³Ìù</button>
+                <span style="flex:1; text-align:right; font-size:0.75rem; color:#3d6f94;">ÊÚÈ¨Õ³Ìù</span>
+            </div>
         </div>
-        <div class="input-group">
-          <label for="codonInput">
-            <i class="fas fa-stream"></i> 5'â€”å¯†ç å­åºåˆ—â€”3'
-          </label>
-          <textarea id="codonInput" placeholder="5'-CAGACGGCAUCCUGGCCUAG-3'">5'-CAGACGGCAUCCUGGCCUAG-3'</textarea>
-          <div class="count">
-            <i class="fas fa-cubes"></i> å¯†ç å­æ•°: <span id="codonCount">0</span>
-          </div>
-        </div>
-        <div class="controls">
-          <div class="btn-group">
-            <button class="btn-convert" id="toTextBtn">
-              <i class="fas fa-arrow-up"></i> è½¬æ–‡æœ¬
-            </button>
-            <button class="btn-copy" id="copyCodonBtn">
-              <i class="fas fa-copy"></i> å¤åˆ¶
-            </button>
-          </div>
-          <button class="btn-clear" id="clearCodonBtn">
-            <i class="fas fa-eraser"></i> æ¸…ç©º
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    // ============ å…¨æ˜ å°„è¡¨ï¼ˆAUCGå¯†ç å­â†”Base64ï¼‰============
-    const codonMap = {
-      // å¤§å†™ A-Z
-      'A': 'AAA', 'B': 'AAC', 'C': 'AAG', 'D': 'AAU', 'E': 'ACA', 'F': 'ACC', 'G': 'ACG', 'H': 'ACU',
-      'I': 'AGA', 'J': 'AGC', 'K': 'AGG', 'L': 'AGU', 'M': 'AUA', 'N': 'AUC', 'O': 'AUG', 'P': 'AUU',
-      'Q': 'CAA', 'R': 'CAC', 'S': 'CAG', 'T': 'CAU', 'U': 'CCA', 'V': 'CCC', 'W': 'CCG', 'X': 'CCU',
-      'Y': 'CGA', 'Z': 'CGC',
-      // å°å†™ a-z
-      'a': 'CGG', 'b': 'CGU', 'c': 'CUA', 'd': 'CUC', 'e': 'CUG', 'f': 'CUU', 'g': 'GAA', 'h': 'GAC',
-      'i': 'GAG', 'j': 'GAU', 'k': 'GCA', 'l': 'GCC', 'm': 'GCG', 'n': 'GCU', 'o': 'GGA', 'p': 'GGC',
-      'q': 'GGG', 'r': 'GGU', 's': 'GUA', 't': 'GUC', 'u': 'GUG', 'v': 'GUU', 'w': 'UAA', 'x': 'UAC',
-      'y': 'UAG', 'z': 'UAU',
-      // æ•°å­— 0-9
-      '0': 'UCA', '1': 'UCC', '2': 'UCG', '3': 'UCU', '4': 'UGA', '5': 'UGC', '6': 'UGG', '7': 'UGU',
-      '8': 'UUA', '9': 'UUC',
-      // ç‰¹æ®Šå­—ç¬¦ + /
-      '+': 'UUG', '/': 'UUU',
-      // å¡«å……å­—ç¬¦ '=' æ˜ å°„ä¸ºèµ·å§‹å¯†ç å­ AUG
-      '=': 'AUG'
-    };
+    <div class="footer-note">
+        <span>? ¹æÔò£ºBase64Ä©Î²µÈºÅÓÃËæ»ú¼î»ù(A/U/C/G)Ìæ´ú£»½âÂëÊ±¸ù¾İ³¤¶ÈÄ£3×Ô¶¯²¹»ØµÈºÅ¡£</span>
+        <button class="clear-all-btn" id="clearAllBtn">? Çå¿ÕÁ½¸öÊäÈë¿ò</button>
+    </div>
+</div>
 
-    // åå‘æ˜ å°„: å¯†ç å­ -> Base64å­—ç¬¦
-    const base64Map = {};
-    for (const [key, val] of Object.entries(codonMap)) {
-      base64Map[val] = key;
-    }
+<script>
+    (function() {
+        // ---------- Ó³Éä±í (ÓëÔ­±íÍêÈ«Ò»ÖÂ) ----------
+        const codonMap = {
+            'A':'AAA','B':'AAC','C':'AAG','D':'AAU','E':'ACA','F':'ACC','G':'ACG','H':'ACU','I':'AGA','J':'AGC','K':'AGG','L':'AGU','M':'AUA','N':'AUC','O':'AUG','P':'AUU','Q':'CAA','R':'CAC','S':'CAG','T':'CAU','U':'CCA','V':'CCC','W':'CCG','X':'CCU','Y':'CGA','Z':'CGC',
+            'a':'CGG','b':'CGU','c':'CUA','d':'CUC','e':'CUG','f':'CUU','g':'GAA','h':'GAC','i':'GAG','j':'GAU','k':'GCA','l':'GCC','m':'GCG','n':'GCU','o':'GGA','p':'GGC','q':'GGG','r':'GGU','s':'GUA','t':'GUC','u':'GUG','v':'GUU','w':'UAA','x':'UAC','y':'UAG','z':'UAU',
+            '0':'UCA','1':'UCC','2':'UCG','3':'UCU','4':'UGA','5':'UGC','6':'UGG','7':'UGU','8':'UUA','9':'UUC','+':'UUG','/':'UUU'
+        };
 
-    // ---------- DOM ç»‘å®š ----------
-    const textInput = document.getElementById('textInput');
-    const codonInput = document.getElementById('codonInput');
-    const toCodonBtn = document.getElementById('toCodonBtn');
-    const toTextBtn = document.getElementById('toTextBtn');
-    const clearTextBtn = document.getElementById('clearTextBtn');
-    const clearCodonBtn = document.getElementById('clearCodonBtn');
-    const copyTextBtn = document.getElementById('copyTextBtn');
-    const copyCodonBtn = document.getElementById('copyCodonBtn');
-    const textCount = document.getElementById('textCount');
-    const codonCount = document.getElementById('codonCount');
-
-    // ---------- è¾…åŠ©å‡½æ•° ----------
-    function updateCounts() {
-      // æ–‡æœ¬åŸŸå­—ç¬¦æ•°
-      textCount.textContent = textInput.value.length;
-
-      // å¯†ç å­è®¡æ•°ï¼šå¿½ç•¥5' 3'æ ‡è®°ï¼Œåªæ•°AUCGä¸‰è”ä½“
-      let rawCodon = codonInput.value;
-      let cleanSeq = '';
-      if (rawCodon.startsWith("5'-") && rawCodon.endsWith("-3'")) {
-        cleanSeq = rawCodon.substring(3, rawCodon.length - 3);
-      } else {
-        cleanSeq = rawCodon;
-      }
-      // åªä¿ç•™AUCG
-      const onlyBases = cleanSeq.toUpperCase().replace(/[^AUCG]/g, '');
-      codonCount.textContent = Math.floor(onlyBases.length / 3);
-    }
-
-    // æ–‡æœ¬ â†’ Base64 â†’ å¯†ç å­åºåˆ—ï¼ˆæ— ç©ºæ ¼ï¼‰
-    function convertToCodonsNoSpace(base64Str) {
-      let out = '';
-      for (let ch of base64Str) {
-        out += codonMap[ch] || codonMap['='];   // æœªçŸ¥å­—ç¬¦é»˜è®¤ç”¨AUG(=)
-      }
-      return out;
-    }
-
-    // å¯†ç å­åºåˆ— â†’ Base64å­—ç¬¦ä¸²
-    function convertFromCodons(codonStr) {
-      let base64Result = '';
-      for (let i = 0; i < codonStr.length; i += 3) {
-        const trip = codonStr.substring(i, i + 3);
-        base64Result += base64Map[trip] || '=';   // æ— æ•ˆæ˜ å°„å¡«=
-      }
-      return base64Result;
-    }
-
-    // å¤åˆ¶åé¦ˆ
-    function showCopyFeedback(btn) {
-      const originalHTML = btn.innerHTML;
-      const originalClass = btn.className;
-      btn.innerHTML = '<i class="fas fa-check"></i> å·²å¤åˆ¶';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.innerHTML = originalHTML;
-        btn.className = originalClass;
-      }, 1800);
-    }
-
-    // ---------- äº‹ä»¶ç›‘å¬ ----------
-    // æ–‡æœ¬ â†’ å¯†ç å­
-    toCodonBtn.addEventListener('click', () => {
-      const txt = textInput.value;
-      if (!txt) { alert('è¯·è¾“å…¥æ–‡æœ¬'); return; }
-      try {
-        // å…ˆè½¬base64 (Unicodeå®‰å…¨)
-        const base64 = btoa(unescape(encodeURIComponent(txt)));
-        const codonSeq = convertToCodonsNoSpace(base64);
-        codonInput.value = `5'-${codonSeq}-3'`;
-        updateCounts();
-      } catch (e) {
-        alert('è½¬æ¢å‡ºé”™: ' + e.message);
-      }
-    });
-
-    // å¯†ç å­ â†’ æ–‡æœ¬
-    toTextBtn.addEventListener('click', () => {
-      let codonRaw = codonInput.value.trim();
-      if (!codonRaw) { alert('è¯·è¾“å…¥å¯†ç å­åºåˆ—'); return; }
-
-      // å®½å®¹æ ¼å¼ï¼šå…è®¸å¤§å°å†™ï¼Œå°½é‡æå– 5'-XXX-3'
-      let coreSeq = '';
-      const regex = /^5'-([AUCGaucg]+)-3'$/;
-      const match = codonRaw.match(regex);
-      if (match) {
-        coreSeq = match[1].toUpperCase();
-      } else {
-        // å°è¯•ç›´æ¥æå–æ‰€æœ‰AUCGå­—ç¬¦ï¼ˆå¦‚æœç”¨æˆ·æ²¡åŠ æ ‡è®°ï¼‰
-        const allAUCG = codonRaw.toUpperCase().replace(/[^AUCG]/g, '');
-        if (allAUCG.length > 0) {
-          coreSeq = allAUCG;
-        } else {
-          alert('æ— æ³•è¯†åˆ«å¯†ç å­åºåˆ—ï¼Œè¯·ä½¿ç”¨ç±»ä¼¼ 5\'-CAGXXX-3\' æ ¼å¼');
-          return;
+        const reverseCodonMap = {};
+        for (const [base64Char, codon] of Object.entries(codonMap)) {
+            reverseCodonMap[codon] = base64Char;
         }
-      }
 
-      // é•¿åº¦åˆæ³•æ€§
-      if (coreSeq.length % 3 !== 0) {
-        alert(`å¯†ç å­åºåˆ—é•¿åº¦(${coreSeq.length})ä¸æ˜¯3çš„å€æ•°ï¼Œè¯·æ£€æŸ¥ã€‚`);
-        return;
-      }
-
-      // æ£€æŸ¥æ¯ä¸ªå¯†ç å­æ˜¯å¦åœ¨æ˜ å°„è¡¨ä¸­
-      for (let i = 0; i < coreSeq.length; i += 3) {
-        const codon = coreSeq.substring(i, i + 3);
-        if (!base64Map[codon]) {
-          alert(`æ— æ•ˆå¯†ç å­: ${codon} ï¼Œå¿…é¡»ä¸ºAUCGç»„åˆä¸”åœ¨æ˜ å°„è¡¨ä¸­ã€‚`);
-          return;
+        // Ëæ»ú¼î»ùÉú³ÉÆ÷ (A,U,C,G)
+        function randomBase() {
+            const bases = ['A', 'U', 'C', 'G'];
+            return bases[Math.floor(Math.random() * 4)];
         }
-      }
 
-      try {
-        const base64Str = convertFromCodons(coreSeq);
-        // base64è§£ç å›æ–‡æœ¬
-        const decoded = decodeURIComponent(escape(atob(base64Str)));
-        textInput.value = decoded;
+        // ---------- DOM ÔªËØ ----------
+        const textInput = document.getElementById('textInput');
+        const codonInput = document.getElementById('codonInput');
+        const encodeBtn = document.getElementById('encodeBtn');
+        const decodeBtn = document.getElementById('decodeBtn');
+        const clearTextBtn = document.getElementById('clearTextBtn');
+        const clearCodonBtn = document.getElementById('clearCodonBtn');
+        const copyCodonBtn = document.getElementById('copyCodonBtn');
+        const pasteCodonBtn = document.getElementById('pasteCodonBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const textCharCount = document.getElementById('textCharCount');
+        const codonCharCount = document.getElementById('codonCharCount');
+
+        // ---------- ¸¨Öúº¯Êı ----------
+        function updateCounts() {
+            textCharCount.textContent = textInput.value.length;
+            codonCharCount.textContent = codonInput.value.length;
+        }
+
+        function shakeElement(element) {
+            element.classList.add('error-flash');
+            setTimeout(() => element.classList.remove('error-flash'), 500);
+        }
+
+        // ---------- ±àÂë: ÎÄ±¾ -> Base64 (´¦ÀíµÈºÅ) -> ÃÜÂë×Ó ----------
+        function encodeTextToCodon() {
+            const rawText = textInput.value;
+            if (rawText === '') {
+                codonInput.value = '';
+                updateCounts();
+                return;
+            }
+
+            try {
+                // 1. ÎÄ±¾ -> UTF-8×Ö½Ú -> Base64
+                const utf8Bytes = new TextEncoder().encode(rawText);
+                let binary = '';
+                for (let i = 0; i < utf8Bytes.length; i++) {
+                    binary += String.fromCharCode(utf8Bytes[i]);
+                }
+                let base64Str = btoa(binary);  // ¿ÉÄÜ°üº¬Ò»¸ö»òÁ½¸öµÈºÅ
+
+                // 2. ¼Ç×¡µÈºÅÊıÁ¿£¬²¢ÒÆ³ıµÈºÅ (ÓÃËæ»ú¼î»ù´úÌæ)
+                let equalSignCount = 0;
+                if (base64Str.endsWith('==')) {
+                    equalSignCount = 2;
+                    base64Str = base64Str.slice(0, -2); // È¥µôÁ½¸öµÈºÅ
+                } else if (base64Str.endsWith('=')) {
+                    equalSignCount = 1;
+                    base64Str = base64Str.slice(0, -1); // È¥µôÒ»¸öµÈºÅ
+                }
+
+                // 3. ½«Base64Ã¿¸ö×Ö·û(²»º¬µÈºÅ)×ªÎªÃÜÂë×ÓÈıÁªÌå
+                let codonResult = '';
+                for (let i = 0; i < base64Str.length; i++) {
+                    const ch = base64Str[i];
+                    const codon = codonMap[ch];
+                    if (!codon) {
+                        throw new Error(`ÎŞĞ§Base64×Ö·û: ${ch}`);
+                    }
+                    codonResult += codon;
+                }
+
+                // 4. ²¹ÉÏËæ»ú¼î»ù£ºµÈºÅÊıÁ¿ * 3 ¸öËæ»ú¼î»ù (Ã¿¸öµÈºÅ¶ÔÓ¦Ò»¸öÈıÁªÌå£¬µ«ÕâÀïÖ±½Ó¼ÓËæ»úÈıÁªÌå)
+                //   ×¢Òâ£ºÃ¿¸öµÈºÅÔ­±¾¶ÔÓ¦Ò»¸ö×Ö·ûµÄÎ»ÖÃ£¬µ«ÎÒÃÇÓÃÈıÁªÌåÌî³ä¡£ÎªÁË±£³Ö½âÂëÊ±ÄÜÍ¨¹ı³¤¶È·´ÍÆµÈºÅÊı£¬
+                //   ÎÒÃÇÖ±½ÓÌí¼Ó equalSignCount * 3 ¸öËæ»ú¼î»ù (¼´ equalSignCount ¸öËæ»úÈıÁªÌå)
+                for (let e = 0; e < equalSignCount; e++) {
+                    // Ìí¼ÓÒ»¸öËæ»úµÄÈıÁªÌå (3¸öËæ»ú¼î»ù)
+                    codonResult += randomBase() + randomBase() + randomBase();
+                }
+
+                codonInput.value = codonResult;
+            } catch (e) {
+                console.warn('±àÂëÊ§°Ü:', e);
+                codonInput.value = '[±àÂë´íÎó]';
+                shakeElement(document.getElementById('leftCard'));
+            }
+            updateCounts();
+        }
+
+        // ---------- ½âÂë: ÃÜÂë×Ó -> Base64 (¸ù¾İ³¤¶ÈÄ£3ÍÆ¶ÏµÈºÅ) -> ÎÄ±¾ ----------
+        function decodeCodonToText() {
+            let rawCodon = codonInput.value;
+            if (rawCodon.trim() === '') {
+                textInput.value = '';
+                updateCounts();
+                return;
+            }
+
+            try {
+                // 1. È¥³ı¿Õ°××Ö·û£¬²¢×ª»»Îª´óĞ´ (Ö»´¦Àí´óĞ´AUCG)
+                let cleaned = rawCodon.replace(/\s+/g, '').toUpperCase();
+                if (!/^[AUCG]+$/.test(cleaned)) {
+                    throw new Error('ÃÜÂë×ÓÖ»ÄÜ°üº¬A¡¢U¡¢C¡¢G£¨ºöÂÔ¿Õ°×£©');
+                }
+                if (cleaned.length % 3 !== 0) {
+                    throw new Error('ÃÜÂë×Ó³¤¶È±ØĞëÊÇ3µÄ±¶Êı');
+                }
+
+                // 2. ¹Ø¼ü£º¼ÆËãÄ©Î²Ëæ»úÌî³äµÄµÈºÅÊıÁ¿ = ×Ü³¤¶ÈÄ£3µÄÓàÊı£¿²»¶Ô£¬×Ü³¤¶ÈÒÑ¾­ÊÇ3±¶Êı¡£
+                //   Êµ¼ÊÉÏ£¬Ô­Ê¼Base64Ä©Î²µÈºÅÊıÁ¿¿ÉÒÔÊÇ0,1,2¡£µÈºÅ±»Ìæ»»Îª3*N¸ö¼î»ù£¬ËùÒÔ×îÖÕÃÜÂë×Ó³¤¶È = Ô­Ê¼Base64×Ö·ûÊı*3 + µÈºÅÊı*3¡£
+                //   Éè base64×Ö·ûÊı = n (²»º¬µÈºÅ), µÈºÅÊı = p (0/1/2)¡£ÄÇÃ´ÃÜÂë×Ó³¤¶È = (n+p)*3¡£
+                //   ËùÒÔ p = (ÃÜÂë×Ó³¤¶È/3) - n£¬µ«nÎ´Öª¡£µ«ÎÒÃÇ²»ĞèÒªÖªµÀn£¬ÎÒÃÇÖ»ĞèÒªÖªµÀp¡£
+                //   È»¶ø p Ö»ÄÜÎª0,1,2£¬ÇÒ±ØĞëÂú×ã (×Ü³¤¶È/3) >= p¡£ÎÒÃÇ¿ÉÒÔÍ¨¹ı·´ÏòÓ³Éä»Ö¸´base64×Ö·û´®Ö±µ½×îºóÓöµ½ÎŞ·¨Ó³Éä?
+                //   ¸üÎÈ½¡µÄ·½·¨£ºÏÈ³¢ÊÔ½«Ã¿Èı¸ö×ÖÄ¸×ªÎªbase64×Ö·û£¬Èç¹û×îºó¼¸¸öÈıÁªÌåÓ³ÉäÊ§°Ü£¬ËµÃ÷¿ÉÄÜÊÇÌî³äÇø¡£
+                //   µ«ÒòÎªÎÒÃÇÓ³Éä±íÈ«¸²¸ÇAUCGËùÓĞ×éºÏ£¨64ÖÖ£©£¬ÈÎºÎÈıÁªÌå¶¼ÄÜÓ³Éäµ½Ò»¸öbase64×Ö·û£¨°üÀ¨Ô­±¾µÈºÅ¶ÔÓ¦µÄÈıÁªÌå£©¡£
+                //   µÈºÅ¶ÔÓ¦µÄÊÇÌî³äÓÃµÄËæ»úÈıÁªÌå£¬ËüÃÇÒ²»áÓ³Éäµ½Ä³¸öbase64×Ö·û£¬Ôì³É¶àÓàµÄ×Ö·û¡£
+                //   ÎªÁËÕıÈ·½âÂë£¬ÎÒÃÇ±ØĞë¸ù¾İµÈºÅÊıÁ¿½Ø¶Ï¡£
+                
+                //   ¸ù¾İ¹æÔò£º±àÂëÊ±ÎÒÃÇÔÚÕæÊµbase64×Ö·ûÖ®ºóÌí¼ÓÁË p*3 ¸öËæ»ú¼î»ù (p¸öËæ»úÈıÁªÌå)¡£
+                //   Òò´Ë£¬ÕæÕıµÄbase64×Ö·ûÊı = (cleaned.length / 3) - p¡£
+                //   ½âÂëÇ°ÎÒÃÇ²»ÖªµÀp¡£µ«ÎÒÃÇ¿ÉÒÔÀûÓÃ base64 ×Ö·û´®³¤¶ÈÄ£4 µÄĞÔÖÊÀ´ÍÆ¶Ï p¡£
+                //   Ô­Ê¼µÄ base64Str (²»´øµÈºÅ) ³¤¶È n Âú×ã£ºn % 4 ¿ÉÒÔÊÇ 0,2,3? Êµ¼Ê²»´øµÈºÅµÄbase64³¤¶È mod 4 ¿ÉÒÔÊÇ0,2,3? 
+                //   ±ê×¼base64£ºÔ­Ê¼Êı¾İ³¤¶È mod 3 ¾ö¶¨µÈºÅÊı¡£ÎÒÃÇ±àÂëÊ±È¥µôµÈºÅ£¬ËùÒÔµÈºÅÊı p = (4 - (n % 4)) % 4£¬µ«pÎª1»ò2¡£
+                //   µ«ÕâÀïÎÒÃÇ²»ĞèÒªÕâÃ´¸´ÔÓ£¬ÒòÎªÎÒÃÇ¿ÉÒÔÖ±½Ó´Ócleaned³¤¶ÈÍÆ¶Ï p µÄ¿ÉÄÜĞÔ£¬È»ºó³¢ÊÔ½âÂë¡£
+                //   ×î¼òµ¥¿É¿¿µÄ·½·¨£º³¢ÊÔp=0,1,2£¬¿´ÄÄ¸öÄÜ½âÂë³ö¿É¶ÁÎÄ±¾£¨Ã»ÓĞÂÒÂëÇÒÃ»ÓĞÒì³££©¡£µ«ÕâÀïÎªÁËÂ³°ôÇÒ¼òµ¥£¬
+                //   ÎÒÃÇ²ÉÓÃ¹Ì¶¨¹æÔò£º´ÓÃÜÂë×ÓÎ²²¿ÏòÇ°³¢ÊÔ£¬Èç¹ûÈ¥µô×îºó3¸ö¼î»ùºó£¬base64×Ö·û´®³¤¶ÈÄÜ±»4Õû³ıÇÒÄ©Î²ÎŞ·Çbase64×Ö·û£¬µ«»áÓĞÆçÒå¡£
+                //   ÎªÁËÓÃ»§ÓÑºÃ£¬ÎÒÃÇÒªÇóÓÃ»§±£Ö¤Ä©Î²Ìî³äÊÇÍêÕûµÄ£¨ÓÉ±¾¹¤¾ß±àÂë²úÉú£©£¬²¢²ÉÓÃ³¤¶ÈÄ£4·¨ÍÆ¶Ïp¡£
+               
+                //   ¸Ä½ø·½·¨£ºÎÒÃÇÁî×ÜÈıÁªÌåÊıÁ¿ = cleaned.length / 3 = T¡£
+                //   ÉèÕæÊµbase64×Ö·ûÊı = N, µÈºÅÊı = P (0/1/2)¡£ÄÇÃ´ T = N + P¡£
+                //   Í¬Ê±Ô­Ê¼base64×Ö·û´®£¨²»´øµÈºÅ£©³¤¶È N ±ØĞëÂú×ã£º¸ù¾İ±ê×¼£¬Ô­Ê¼Êı¾İ³¤¶È¾ö¶¨N£¬µ« N Óë P Âú×ã£º (N + P) % 4 == 0? ²»ÍêÈ«ÊÇ¡£
+                //   Êµ¼ÊÉÏ£¬ÔÚ±ê×¼base64ÖĞ£¬´øµÈºÅµÄ×Ö·û´®³¤¶È×ÜÊÇ4µÄ±¶Êı¡£ÎÒÃÇ±àÂëÊ±È¥µôÁËµÈºÅ£¬ËùÒÔÕæÊµbase64²¿·Ö³¤¶È N Âú×ã£º
+                //   Èç¹û P=0, N % 4 ¿ÉÒÔÊÇÈÎÒâ£»Èç¹û P=1, Ôò N % 4 == 3£»Èç¹û P=2, Ôò N % 4 == 2¡£
+                //   Òò´Ë£¬ÒÑÖª×ÜÈıÁªÌåÊı T£¬ÇÒ T = N + P£¬ÒÔ¼° N % 4 Óë P µÄÔ¼Êø¡£ÎÒÃÇ¿ÉÒÔÃ¶¾ÙP=0,1,2£¬¼ÆËã³öN=T-P£¬¼ì²é(N % 4)ÊÇ·ñ·ûºÏ¸ÃPµÄÌõ¼ş¡£
+                //   Èç¹ûÖ»ÓĞÒ»¸öPÂú×ã£¬ÄÇ¾ÍÊÇËü£»Èç¹ûÓĞ¶à¸ö£¬ÀíÂÛÉÏ²»¿ÉÄÜ£¬ÒòÎªÌõ¼ş»¥³â£»µ«±ß½çÇé¿öTºÜĞ¡¿ÉÄÜ¶à¸öÂú×ã£¿µ«¸ÅÂÊ¼«µÍ£¬ÎÒÃÇÈ¡µÚÒ»¸öÆ¥ÅäµÄ¡£
+                //   ÎªÁË°²È«£¬Èç¹û¶à¸öÆ¥Åä£¬ÎÒÃÇÑ¡ÔñP×îĞ¡µÄ£¿µ«Êµ¼Ê±àÂëÊ±PÊÇÈ·¶¨µÄ¡£ÎÒÃÇ°´¹æÔòÈ¡¡£
+
+                const T = cleaned.length / 3; // ×ÜÈıÁªÌå¸öÊı
+                let possibleP = [];
+                for (let p = 0; p <= 2; p++) {
+                    const N = T - p;
+                    if (N < 0) continue;
+                    // ¼ì²éN mod 4 ÊÇ·ñ·ûºÏpµÄÌõ¼ş
+                    if (p === 0) {
+                        // ÎŞµÈºÅ: N mod 4 ¿ÉÒÔÊÇ0,1,2,3? Êµ¼ÊÉÏÈÎºÎÓàÊı¶¼ÔÊĞí
+                        possibleP.push(p);
+                    } else if (p === 1) {
+                        // Ò»¸öµÈºÅ: ÒªÇó N % 4 === 3
+                        if (N % 4 === 3) possibleP.push(p);
+                    } else if (p === 2) {
+                        // Á½¸öµÈºÅ: ÒªÇó N % 4 === 2
+                        if (N % 4 === 2) possibleP.push(p);
+                    }
+                }
+
+                if (possibleP.length === 0) {
+                    throw new Error('ÎŞ·¨È·¶¨µÈºÅÊıÁ¿£¨ÃÜÂë×Ó³¤¶ÈÓëBase64¹æÔò²»Æ¥Åä£©');
+                }
+                // Èç¹ûÓĞ¶à¸ö£¬È¡µÚÒ»¸ö£¨ÀíÂÛÉÏÖ»»áÓĞÒ»¸ö£¬µ«ÎªÁËÂ³°ô£¬Ñ¡ÔñP×îĞ¡µÄÄÇ¸ö¸ü°²È«£¬ÒòÎªÉÙ½Ø¶Ï±È¶à½Ø¶ÏºÃ£¿µ«¿ÉÄÜ½âÂë³öÂÒÂë£©
+                // µ«Êµ¼Ê±àÂë²úÉúµÄ±ØÈ»·ûºÏ¹æÔò£¬ËùÒÔÖ»ÓĞÒ»¸ö¡£ÕâÀïÎÒÃÇÈ¡possibleP[0]¡£
+                const estimatedP = possibleP[0]; 
+                
+                // ¸ù¾İ¹À¼ÆµÄP£¬¼ÆËãÕæÊµbase64×Ö·ûÊı N = T - estimatedP
+                const realCodonCount = T - estimatedP; // ÕæÊµµÄbase64×Ö·ûÊı£¨Ã¿¸ö¶ÔÓ¦Ò»¸öÈıÁªÌå£©
+
+                // 2. ÌáÈ¡Ç° realCodonCount ¸öÈıÁªÌå£¬×ª³Ébase64×Ö·û´®
+                let base64Str = '';
+                for (let i = 0; i < realCodonCount; i++) {
+                    const triplet = cleaned.substr(i * 3, 3);
+                    const base64Char = reverseCodonMap[triplet];
+                    if (!base64Char) {
+                        throw new Error(`Î´ÖªµÄÃÜÂë×ÓÈıÁªÌå: ${triplet}`);
+                    }
+                    base64Str += base64Char;
+                }
+
+                // 3. ¸ù¾İestimatedP²¹»ØµÈºÅ
+                if (estimatedP === 1) {
+                    base64Str += '=';
+                } else if (estimatedP === 2) {
+                    base64Str += '==';
+                }
+
+                // 4. Base64½âÂë»ØÎÄ±¾
+                const binary = atob(base64Str);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i);
+                }
+                const decodedText = new TextDecoder().decode(bytes);
+                textInput.value = decodedText;
+            } catch (e) {
+                console.warn('½âÂëÊ§°Ü:', e);
+                textInput.value = '[½âÂëÊ§°Ü: ' + e.message + ']';
+                shakeElement(document.getElementById('rightCard'));
+            }
+            updateCounts();
+        }
+
+        // Çå¿Õ×ó²àÎÄ±¾
+        function clearTextOnly() {
+            textInput.value = '';
+            updateCounts();
+        }
+
+        // Çå¿ÕÓÒ²àÃÜÂë×Ó
+        function clearCodonOnly() {
+            codonInput.value = '';
+            updateCounts();
+        }
+
+        // Çå¿ÕÈ«²¿
+        function clearAll() {
+            textInput.value = '';
+            codonInput.value = '';
+            updateCounts();
+        }
+
+        // ¸´ÖÆÓÒ²àÃÜÂë×ÓÄÚÈİ
+        async function copyCodon() {
+            const content = codonInput.value;
+            if (!content) {
+                alert('Ã»ÓĞ¿É¸´ÖÆµÄÄÚÈİ');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(content);
+                copyCodonBtn.style.background = '#c7e0b0';
+                setTimeout(() => copyCodonBtn.style.background = '', 200);
+            } catch (err) {
+                alert('¸´ÖÆÊ§°Ü: ' + err.message);
+            }
+        }
+
+        // Õ³Ìùµ½ÓÒ²àÃÜÂë×Ó¿ò
+        async function pasteToCodon() {
+            try {
+                const clipboardText = await navigator.clipboard.readText();
+                codonInput.value = clipboardText;
+                updateCounts();
+            } catch (err) {
+                alert('ÎŞ·¨Õ³Ìù£¬ÇëÈ·±£ÊÚÓè¼ôÌù°åÈ¨ÏŞ»òÊÖ¶¯ÊäÈë¡£\n' + err.message);
+            }
+        }
+
+        // ---------- ÊÂ¼ş°ó¶¨ ----------
+        encodeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            encodeTextToCodon();
+        });
+
+        decodeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            decodeCodonToText();
+        });
+
+        clearTextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearTextOnly();
+        });
+
+        clearCodonBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearCodonOnly();
+        });
+
+        copyCodonBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            copyCodon();
+        });
+
+        pasteCodonBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            pasteToCodon();
+        });
+
+        clearAllBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearAll();
+        });
+
+        // ÊµÊ±¼ÆÊı
+        textInput.addEventListener('input', updateCounts);
+        codonInput.addEventListener('input', updateCounts);
+
+        // ¼üÅÌ¿ì½İ: Ctrl+Enter ´¥·¢¸÷×Ô×ª»»
+        textInput.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                encodeTextToCodon();
+            }
+        });
+        codonInput.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                decodeCodonToText();
+            }
+        });
+
+        // ³õÊ¼¼ÆÊı¸üĞÂ
         updateCounts();
-      } catch (e) {
-        alert('è§£ç å¤±è´¥ï¼Œå¯èƒ½å¯†ç å­åºåˆ—ä¸Base64ä¸å¯¹åº”: ' + e.message);
-      }
-    });
-
-    // æ¸…ç©ºæŒ‰é’®
-    clearTextBtn.addEventListener('click', () => { textInput.value = ''; updateCounts(); });
-    clearCodonBtn.addEventListener('click', () => { codonInput.value = ''; updateCounts(); });
-
-    // å¤åˆ¶æŒ‰é’®
-    copyTextBtn.addEventListener('click', async () => {
-      if (!textInput.value) { alert('æ— å†…å®¹å¯å¤åˆ¶'); return; }
-      try {
-        await navigator.clipboard.writeText(textInput.value);
-        showCopyFeedback(copyTextBtn);
-      } catch {
-        textInput.select();
-        document.execCommand('copy');
-        showCopyFeedback(copyTextBtn);
-      }
-    });
-
-    copyCodonBtn.addEventListener('click', async () => {
-      if (!codonInput.value) { alert('æ— å†…å®¹å¯å¤åˆ¶'); return; }
-      try {
-        await navigator.clipboard.writeText(codonInput.value);
-        showCopyFeedback(copyCodonBtn);
-      } catch {
-        codonInput.select();
-        document.execCommand('copy');
-        showCopyFeedback(copyCodonBtn);
-      }
-    });
-
-    // è¾“å…¥æ—¶æ›´æ–°è®¡æ•°
-    textInput.addEventListener('input', updateCounts);
-    codonInput.addEventListener('input', updateCounts);
-
-    // åˆå§‹åŒ–ç¤ºä¾‹ + è®¡æ•°
-    window.addEventListener('load', () => {
-      // ç¤ºä¾‹å·²ç»å†…ç½®åœ¨textareaä¸­ï¼Œä½†ä¸ºäº†ç¡®ä¿å¯†ç å­æ¡†ä¸ç¤ºä¾‹æ–‡æœ¬ä¸€è‡´
-      const example = "Hello DNA!";
-      textInput.value = example;
-      const b64 = btoa(unescape(encodeURIComponent(example)));
-      const codonEx = convertToCodonsNoSpace(b64);
-      codonInput.value = `5'-${codonEx}-3'`;
-      updateCounts();
-    });
-
-    // é¢å¤–è‡ªé€‚åº”æ£€æµ‹ï¼šç›‘æ§çª—å£å¤§å°å˜åŒ–æ—¶å¯å†æ¬¡è§¦å‘å¸ƒå±€ï¼Œä½†CSSåª’ä½“æŸ¥è¯¢å·²ç»è¶³å¤Ÿã€‚
-    // æç‰¹æ®Šåœºæ™¯ï¼šæ‰‹åŠ¨æ·»åŠ ä¸€ä¸ªå¾®å°çš„orientationæ”¹å˜ç›‘å¬ï¼Œç¡®ä¿è®¡æ•°æ›´æ–°
-    window.addEventListener('resize', function() {
-      // åªæ˜¯ä¸ºäº†åŠ¨æ€è®¡æ•°æ›´æ–°ï¼Œå¸ƒå±€ç”±CSSå…¨æƒè´Ÿè´£ã€‚
-      // å¯å¿½ç•¥ã€‚
-    });
-  </script>
+    })();
+</script>
 </body>
 </html>
-
-
